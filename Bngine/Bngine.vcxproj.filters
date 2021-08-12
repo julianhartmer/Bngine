@@ -19,4 +19,29 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Bngine1.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\SDL2-2.0.14\lib\lib_x64\SDL2.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\libjpeg-9.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\libpng16-16.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\libtiff-5.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\libwebp-7.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\SDL2_image.dll" />
+    <None Include="lib\SDL2_image-2.0.5\lib\lib_x64\zlib1.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\SDL2-2.0.14\lib\lib_x64\SDL2.lib" />
+    <Library Include="lib\SDL2-2.0.14\lib\lib_x64\SDL2main.lib" />
+    <Library Include="lib\SDL2-2.0.14\lib\lib_x64\SDL2test.lib" />
+    <Library Include="lib\SDL2_image-2.0.5\lib\lib_x64\SDL2_image.lib" />
+  </ItemGroup>
 </Project>
