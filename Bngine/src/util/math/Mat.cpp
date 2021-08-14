@@ -173,6 +173,14 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
+	M22f::M22f(float const (&m)[4]) {
+		for (int idx = 0;idx < 4;idx++) {
+			int x = idx % 2;
+			int y = idx / 2;
+			this->m[y][x] = m[idx];
+		}
+	}
+
 	void M22f::operator=(M22f mat) {
 		for (int y = 0; y < 2; y++)
 		{
@@ -277,6 +285,14 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
+	M33f::M33f(float const (&m)[9]) {
+		for (int idx = 0;idx < 9;idx++) {
+			int x = idx % 3;
+			int y = idx / 3;
+			this->m[y][x] = m[idx];
+		}
+	}
+
 	void M33f::operator=(M33f mat) {
 		for (int y = 0; y < 3; y++)
 		{
@@ -357,7 +373,7 @@ namespace Mat {
 	}
 
 	float M33f::det(void) {
-		return (this->_11 * this->_22 * this->_33 + this->_12 * this->_23 * this->_31 + this->_13 * this->_21 * this->_32 - this->_31 * this->_22 * this->_13 - this->_32 * this->_23 * this->_11 - this->_33 * this->_21 * this->_21);
+		return (this->_11 * (this->_22 * this->_33 - this->_23 * this->_32) - this->_12 * (this->_21 * this->_33 - this->_23 * this->_31) + this->_13 * (this->_21 * this->_32 - this->_22 * this->_31));
 	}
 
 	M33f M33f::t(void) {
@@ -374,10 +390,9 @@ namespace Mat {
 		return o;
 	}
 
-	std::ostream &operator<<(std::ostream &os, const M44f &m) {
-		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << ", " << m._14 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ", " << m._24 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << ", " << m._34 << "; " << std::endl << m._41 << ", " << m._42 << ", " << m._43 << ", " << m._44 << "]";
+	std::ostream& operator<<(std::ostream& os, const M33f& m) {
+		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << "]";
 	}
-
 
 	//////////
 	// M44f //
@@ -389,6 +404,14 @@ namespace Mat {
 
 	M44f::M44f(float m[4][4]) {
 		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M44f::M44f(float const (&m)[16]) {
+		for (int idx = 0;idx < 16;idx++) {
+			int x = idx % 4;
+			int y = idx / 4;
+			this->m[y][x] = m[idx];
+		}
 	}
 
 	M44f M44f::operator+(M44f mat) {
@@ -461,8 +484,28 @@ namespace Mat {
 	}
 
 	float M44f::det(void) {
-		// TODO: 3x3 implementation as placeholder here, 4x4 determinant involves determinants of submatrices
-		return (this->_11 * this->_22 * this->_33 + this->_12 * this->_23 * this->_31 + this->_13 * this->_21 * this->_32 - this->_31 * this->_22 * this->_13 - this->_32 * this->_23 * this->_11 - this->_33 * this->_21 * this->_21);
+		return (this->_11 * this->minor(1, 1).det() - this->_12 * this->minor(1, 2).det() + this->_13 * this->minor(1, 3).det() - this->_14 * this->minor(1, 4).det());
+	}
+
+	M33f M44f::minor(int row, int col) {
+		// TODO: catch invalid row and col values
+		M33f o;
+		// skip the minor row and col via offsets that are added to the array access
+		int offset_x = 0;
+		int offset_y = 0;
+		for (int y = 0;y < 3;y++)
+		{
+			if (y == row-1)
+				offset_y = 1;
+			offset_x = 0;
+			for (int x = 0;x < 3;x++)
+			{
+				if (x == col-1)
+					offset_x = 1;
+				o.m[y][x] = m[y + offset_y][x + offset_x];
+			}
+		}
+		return o;
 	}
 
 	M44f M44f::t(void) {
@@ -487,7 +530,153 @@ namespace Mat {
 		return o;
 	}
 
-	std::ostream &operator<<(std::ostream &os, const M33f &m) {
-		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << "]";
+	std::ostream& operator<<(std::ostream& os, const M44f& m) {
+		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << ", " << m._14 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ", " << m._24 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << ", " << m._34 << "; " << std::endl << m._41 << ", " << m._42 << ", " << m._43 << ", " << m._44 << "]";
+	}
+
+	//////////
+	// M23f //
+	//////////
+	M23f::M23f(void) {
+		float m[2][3] = { 0 };
+		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M23f::M23f(float m[2][3]) {
+		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M23f::M23f(float const (&m)[6]) {
+		for (int idx = 0;idx < 6;idx++) {
+			int x = idx % 3;
+			int y = idx / 2;
+			this->m[y][x] = m[idx];
+		}
+	}
+
+	M23f M23f::operator+(M23f mat) {
+		M23f o;
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				o.m[y][x] = m[y][x] + mat.m[y][x];
+			}
+		}
+		return o;
+	}
+
+	M23f M23f::operator-(M23f mat) {
+		M23f o;
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				o.m[y][x] = m[y][x] - mat.m[y][x];
+			}
+		}
+		return o;
+	}
+
+	M23f M23f::operator*(float f) {
+		M23f o;
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				o.m[y][x] = m[y][x] * f;
+			}
+		}
+		return o;
+	}
+
+	V2f M23f::operator*(V3f v) {
+		V2f o;
+		for (int y = 0; y < 2; y++)
+		{
+			o.v[y] = 0;
+			for (int x = 0; x < 3; x++)
+			{
+				o.v[y] += v.v[x] * m[y][x];
+			}
+		}
+		return o;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const M23f& m) {
+		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << "]";
+	}
+
+	//////////
+	// M34f //
+	//////////
+	M34f::M34f(void) {
+		float m[3][4] = { 0 };
+		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M34f::M34f(float m[3][4]) {
+		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M34f::M34f(float const (&m)[12]) {
+		for (int idx = 0;idx < 12;idx++) {
+			int x = idx % 4;
+			int y = idx / 3;
+			this->m[y][x] = m[idx];
+		}
+	}
+
+	M34f M34f::operator+(M34f mat) {
+		M34f o;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				o.m[y][x] = m[y][x] + mat.m[y][x];
+			}
+		}
+		return o;
+	}
+
+	M34f M34f::operator-(M34f mat) {
+		M34f o;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				o.m[y][x] = m[y][x] - mat.m[y][x];
+			}
+		}
+		return o;
+	}
+
+	M34f M34f::operator*(float f) {
+		M34f o;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				o.m[y][x] = m[y][x] * f;
+			}
+		}
+		return o;
+	}
+
+	V3f M34f::operator*(V4f v) {
+		V3f o;
+		for (int y = 0; y < 3; y++)
+		{
+			o.v[y] = 0;
+			for (int x = 0; x < 4; x++)
+			{
+				o.v[y] += v.v[x] * m[y][x];
+			}
+		}
+		return o;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const M34f& m) {
+		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << ", " << m._14 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ", " << m._24 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << ", " << m._34 << "]";
 	}
 }
