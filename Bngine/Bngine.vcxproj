@@ -146,6 +146,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\util\math\Mat.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
