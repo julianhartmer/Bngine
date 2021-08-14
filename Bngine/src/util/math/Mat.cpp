@@ -174,11 +174,7 @@ namespace Mat {
 	}
 
 	M22f::M22f(float const (&m)[4]) {
-		for (int idx = 0;idx < 4;idx++) {
-			int x = idx % 2;
-			int y = idx / 2;
-			this->m[y][x] = m[idx];
-		}
+		memcpy(&this->m, m, sizeof(m));
 	}
 
 	void M22f::operator=(M22f mat) {
@@ -286,11 +282,7 @@ namespace Mat {
 	}
 
 	M33f::M33f(float const (&m)[9]) {
-		for (int idx = 0;idx < 9;idx++) {
-			int x = idx % 3;
-			int y = idx / 3;
-			this->m[y][x] = m[idx];
-		}
+		memcpy(&this->m, m, sizeof(m));
 	}
 
 	void M33f::operator=(M33f mat) {
@@ -547,11 +539,7 @@ namespace Mat {
 	}
 
 	M23f::M23f(float const (&m)[6]) {
-		for (int idx = 0;idx < 6;idx++) {
-			int x = idx % 3;
-			int y = idx / 2;
-			this->m[y][x] = m[idx];
-		}
+		memcpy(&this->m, m, sizeof(m));
 	}
 
 	M23f M23f::operator+(M23f mat) {
@@ -620,11 +608,7 @@ namespace Mat {
 	}
 
 	M34f::M34f(float const (&m)[12]) {
-		for (int idx = 0;idx < 12;idx++) {
-			int x = idx % 4;
-			int y = idx / 3;
-			this->m[y][x] = m[idx];
-		}
+		memcpy(&this->m, m, sizeof(m));
 	}
 
 	M34f M34f::operator+(M34f mat) {
