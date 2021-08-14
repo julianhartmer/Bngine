@@ -399,11 +399,7 @@ namespace Mat {
 	}
 
 	M44f::M44f(float const (&m)[16]) {
-		for (int idx = 0;idx < 16;idx++) {
-			int x = idx % 4;
-			int y = idx / 4;
-			this->m[y][x] = m[idx];
-		}
+		memcpy(&this->m, m, sizeof(m));
 	}
 
 	M44f M44f::operator+(M44f mat) {

@@ -88,6 +88,9 @@ int main()
 	std::cout << exp3 << std::endl;
 	std::cout << exp3 * v13 << std::endl;
 
+	M44f exp4 = M44f();
+	std::cout << exp4 << std::endl;
+
 	return 1;
 }
 
