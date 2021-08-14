@@ -74,8 +74,5 @@ int main()
 	std::cout << mat13 * v13 << std::endl;
 	std::cout << v1.norm() << std::endl;
 
-
-
-
 	return 1;
 }

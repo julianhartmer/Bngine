@@ -1,12 +1,10 @@
-//#pragma once
+#pragma once
 #include <iostream>
-
 
 namespace Mat
 {
 	struct V2f
 	{
-
 		// struct definition
 		union {
 			struct {
@@ -15,49 +13,27 @@ namespace Mat
 			};
 			float v[2];
 		};
-		
+
+		// constructors
+		V2f(float x, float y);
+		V2f(float v[2]);
+		V2f(void);
+
 		// operators
-		inline void operator=(V2f v) {
-			x = v.x;
-			y = v.y;
-		} 
-
-		inline V2f operator+(V2f v) {
-			V2f o;
-			o.x = x + v.x;
-			o.y = y + v.y;
-			return o;
-		}
-
-
-		inline V2f operator-(V2f v) {
-			V2f o;
-			o.x = x - v.x;
-			o.y = y - v.y;
-			return o;
-		}
-
-		inline V2f operator*(float f) {
-			V2f o;
-			o.x = f * x;
-			o.y = f * y;
-			return o;
-		}
-
-		inline bool operator==(V2f v) {
-			return (x == v.x && y == v.y);
-		}
+		void operator=(V2f v);
+		V2f operator+(V2f v);
+		V2f operator-(V2f v);
+		V2f operator*(float f);
+		bool operator==(V2f v);
 
 		// methods
-		V2f dot(V2f v);
+		float dot(V2f v);
 		float norm(void);
-		float normalize(void);
+		V2f normalized(void);
 	};
 
-	// printing
-	std::ostream& operator<<(std::ostream& os, const V2f& v) {
-		return os << "[" << v.x << "; " << std::endl << v.y << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const V2f &v);
+
 
 	struct V3f
 	{
@@ -70,39 +46,15 @@ namespace Mat
 			float v[3];
 		};
 
-		inline void operator=(V3f v) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
-		}
+		V3f(void);
+		V3f(float x, float y, float z);
+		V3f(float v[3]);
 
-		inline V3f operator+(V3f v) {
-			V3f o;
-			o.x = x + v.x;
-			o.y = y + v.y;
-			o.z = z + v.z;
-			return o;
-		}
-
-		inline V3f operator-(V3f v) {
-			V3f o;
-			o.x = x - v.x;
-			o.y = y - v.y;
-			o.z = z - v.z;
-			return o;
-		}
-
-		inline V3f operator*(float f) {
-			V3f o;
-			o.x = f * x;
-			o.y = f * y;
-			o.z = f * z;
-			return o;
-		}
-
-		inline bool operator==(V3f v) {
-			return (x == v.x && y == v.y && z == v.z);
-		}
+		void operator=(V3f v);
+		V3f operator+(V3f v);
+		V3f operator-(V3f v);
+		V3f operator*(float f);
+		bool operator==(V3f v);
 
 		V3f dot(V3f v);
 		V3f cross(V3f v);
@@ -110,9 +62,8 @@ namespace Mat
 		float normalize(void);
 	};
 
-	std::ostream& operator<<(std::ostream& os, const V3f& v) {
-		return os << "[" << v.x << "; " << std::endl << v.y << "; " << std::endl << v.z << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const V3f &v);
+
 
 	struct V4f
 	{
@@ -126,53 +77,27 @@ namespace Mat
 			float v[4];
 		};
 
-		//TODO: schauen wie w hier funktioniert
-		// betrifft alle Methoden hier
+		V4f(void);
+		V4f(float x, float y, float z, float w);
+		V4f(float v[4]);
 
+		// TODO: study the use of w
+		// relevant for all those operators and methods
+		void operator=(V4f v);
+		V4f operator+(V4f v);
+		V4f operator-(V4f v);
+		V4f operator*(float f);
+		bool operator==(V3f v);
 
-		inline void operator=(V4f v) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
-		}
-
-		inline V4f operator+(V4f v) {
-			V4f o;
-			o.x = x + v.x;
-			o.y = y + v.y;
-			o.z = z + v.z;
-			return o;
-		}
-
-		inline V4f operator-(V4f v) {
-			V4f o;
-			o.x = x - v.x;
-			o.y = y - v.y;
-			o.z = z - v.z;
-			return o;
-		}
-
-		inline V4f operator*(float f) {
-			V4f o;
-			o.x = f * x;
-			o.y = f * y;
-			o.z = f * z;
-			return o;
-		}
-
-		inline bool operator==(V3f v) {
-			return (x == v.x && y == v.y && z == v.z);
-		}
-
+		// TODO
 		V4f dot(V4f v);
 		V4f cross(V4f v);
 		float norm(void);
 		float normalize(void);
 	};
 
-	std::ostream& operator<<(std::ostream& os, const V4f& v) {
-		return os << "[" << v.x << "; " << std::endl << v.y << "; " << std::endl << v.z << "; " << std::endl << v.w << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const V4f &v);
+
 
 	struct M22f
 	{
@@ -184,91 +109,25 @@ namespace Mat
 			float m[2][2];
 		};
 
-		inline void operator=(M22f mat) {
-			for (int y = 0; y < 2; y++)
-			{
-				for (int x = 0; x < 2; x++)
-				{
-					m[y][x] = mat.m[y][x];
-				}
-			}
-		}
+		M22f(void);
+		M22f(float e11, float e12, float e21, float e22);
+		M22f(float m[2][2]);
 
-		inline M22f operator+(M22f mat) {
-			M22f o;
-			for (int y=0; y<2; y++)
-			{
-				for (int x = 0; x < 2; x++)
-				{
-					o.m[y][x] = m[y][x] + mat.m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M22f operator-(M22f mat) {
-			M22f o;
-			for (int y = 0; y < 2; y++)
-			{
-				for (int x = 0; x < 2; x++)
-				{
-					o.m[y][x] = m[y][x] - mat.m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M22f operator*(float f) {
-			M22f o;
-			for (int y = 0; y < 2; y++)
-			{
-				for (int x = 0; x < 2; x++)
-				{
-					o.m[y][x] = m[y][x] * f;
-				}
-			}
-			return o;
-		}
-
-		inline V2f operator*(V2f v) {
-			V2f o;
-			for (int y = 0; y < 2; y++)
-			{
-				o.v[y] = 0;
-				for (int x = 0; x < 2; x++)
-				{
-					o.v[y] += v.v[x]*m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M22f operator*(M22f mat) {
-			M22f o;
-			for (int y = 0; y < 2; y++)
-			{
-				for (int x = 0; x < 2; x++)
-				{
-					o.m[y][x] = 0;
-					for (int it = 0; it < 2; it++)
-					{
-						o.m[y][x] += m[y][it] * mat.m[it][x];
-					}
-				}
-			}
-			return o;
-		}
+		void operator=(M22f mat);
+		M22f operator+(M22f mat);
+		M22f operator-(M22f mat);
+		M22f operator*(float f);
+		V2f operator*(V2f v);
+		M22f operator*(M22f mat);
 
 		// == operator not defined for lack of use case (so far)
-
 		float trace(void);
 		M22f t(void);
-		//float det(void);
+		float det(void);
 	};
 
-	std::ostream& operator<<(std::ostream& os, const M22f& m) {
-		return os << "[" << m._11 << ", " << m._12 << "; " << std::endl << m._21 << ", " << m._22 << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const M22f &m);
+
 
 	struct M33f
 	{
@@ -281,91 +140,24 @@ namespace Mat
 			float m[3][3];
 		};
 
-		inline void operator=(M33f mat) {
-			for (int y = 0; y < 3; y++)
-			{
-				for (int x = 0; x < 3; x++)
-				{
-					m[y][x] = mat.m[y][x];
-				}
-			}
-		}
+		M33f(void);
+		M33f(float m[3][3]);
 
-		inline M33f operator+(M33f mat) {
-			M33f o;
-			for (int y = 0; y < 3; y++)
-			{
-				for (int x = 0; x < 3; x++)
-				{
-					o.m[y][x] = m[y][x] + mat.m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M33f operator-(M33f mat) {
-			M33f o;
-			for (int y = 0; y < 3; y++)
-			{
-				for (int x = 0; x < 3; x++)
-				{
-					o.m[y][x] = m[y][x] - mat.m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M33f operator*(float f) {
-			M33f o;
-			for (int y = 0; y < 3; y++)
-			{
-				for (int x = 0; x < 3; x++)
-				{
-					o.m[y][x] = m[y][x] * f;
-				}
-			}
-			return o;
-		}
-
-		inline V3f operator*(V3f v) {
-			V3f o;
-			for (int y = 0; y < 3; y++)
-			{
-				o.v[y] = 0;
-				for (int x = 0; x < 3; x++)
-				{
-					o.v[y] += v.v[x] * m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M33f operator*(M33f mat) {
-			M33f o;
-			for (int y = 0; y < 3; y++)
-			{
-				for (int x = 0; x < 3; x++)
-				{
-					o.m[y][x] = 0;
-					for (int it = 0; it < 3; it++)
-					{
-						o.m[y][x] += m[y][it] * mat.m[it][x];
-					}
-				}
-			}
-			return o;
-		}
+		void operator=(M33f mat);
+		M33f operator+(M33f mat);
+		M33f operator-(M33f mat);
+		M33f operator*(float f);
+		V3f operator*(V3f v);
+		M33f operator*(M33f mat);
 
 		// == operator not defined for lack of use case (so far)
-
 		float trace(void);
 		M33f t(void);
-		//float det(void);
+		float det(void);
 	};
 
-	std::ostream& operator<<(std::ostream& os, const M33f& m) {
-		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const M33f &m);
+
 
 	struct M44f
 	{
@@ -378,78 +170,20 @@ namespace Mat
 			};
 			float m[4][4];
 		};
+		M44f(void);
+		M44f(float m[4][4]);
 
-		inline M44f operator+(M44f mat) {
-			M44f o;
-			for (int y = 0; y < 4; y++)
-			{
-				for (int x = 0; x < 4; x++)
-				{
-					o.m[y][x] = m[y][x] + mat.m[y][x];
-				}
-			}
-			return o;
-		}
 
-		inline M44f operator-(M44f mat) {
-			M44f o;
-			for (int y = 0; y < 4; y++)
-			{
-				for (int x = 0; x < 4; x++)
-				{
-					o.m[y][x] = m[y][x] - mat.m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M44f operator*(float f) {
-			M44f o;
-			for (int y = 0; y < 4; y++)
-			{
-				for (int x = 0; x < 4; x++)
-				{
-					o.m[y][x] = m[y][x] * f;
-				}
-			}
-			return o;
-		}
-
-		inline V4f operator*(V4f v) {
-			V4f o;
-			for (int y = 0; y < 4; y++)
-			{
-				o.v[y] = 0;
-				for (int x = 0; x < 4; x++)
-				{
-					o.v[y] += v.v[x] * m[y][x];
-				}
-			}
-			return o;
-		}
-
-		inline M44f operator*(M44f mat) {
-			M44f o;
-			for (int y = 0; y < 4; y++)
-			{
-				for (int x = 0; x < 4; x++)
-				{
-					o.m[y][x] = 0;
-					for (int it = 0; it < 4; it++)
-					{
-						o.m[y][x] += m[y][it] * mat.m[it][x];
-					}
-				}
-			}
-			return o;
-		}
+		M44f operator+(M44f mat);
+		M44f operator-(M44f mat);
+		M44f operator*(float f);
+		V4f operator*(V4f v);
+		M44f operator*(M44f mat);
 
 		float trace(void);
 		M44f t(void);
-		//float det(void);
+		float det(void);
 	};
 
-	std::ostream& operator<<(std::ostream& os, const M44f& m) {
-		return os << "[" << m._11 << ", " << m._12 << ", " << m._13 << ", " << m._14 << "; " << std::endl << m._21 << ", " << m._22 << ", " << m._23 << ", " << m._24 << ";" << std::endl << m._31 << ", " << m._32 << ", " << m._33 << ", " << m._34 << "; " << std::endl << m._41 << ", " << m._42 << ", " << m._43 << ", " << m._44 << "]";
-	}
+	std::ostream &operator<<(std::ostream &os, const M44f &m);
 }
