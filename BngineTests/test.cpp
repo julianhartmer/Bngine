@@ -24,7 +24,7 @@ TEST(Mat, V2foperators) {
 }
 
 TEST(Mat, V2fmethods) {
-	V2f v1(3, 4), v2(20, 21), v3(19.542, 4.21), res;
+	V2f v1(3, 4), v2(20, 21), v3(19.542f, 4.21f), res;
 	EXPECT_FLOAT_EQ(v1.norm(), 5.0f);
 	EXPECT_FLOAT_EQ(v2.norm(), 29.0f);
 
@@ -63,7 +63,7 @@ TEST(Mat, V3foperators) {
 }
 
 TEST(Mat, V3fmethods) {
-	V3f v1(1, 12, 12), v2(4, 5,20), v3(19.542, 4.21, 12.5943), res;
+	V3f v1(1, 12, 12), v2(4, 5,20), v3(19.542f, 4.21f, 12.5943f), res;
 	EXPECT_FLOAT_EQ(v1.norm(), 17.0f);
 	EXPECT_FLOAT_EQ(v2.norm(), 21.0f);
 
