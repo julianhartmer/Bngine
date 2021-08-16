@@ -169,6 +169,10 @@ namespace Mat {
 		return V4f(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
+	V4f V4f::operator-(V4f v) {
+		return V4f(x - v.x, y - v.y, z - v.z, w - v.w);
+	}
+
 	V4f V4f::operator*(float f) {
 		return V4f(f * x, f * y, f * z, f * w);
 	}
@@ -217,7 +221,7 @@ namespace Mat {
 		_22 = e22;
 	}
 
-	M22f::M22f(float m[2][2]) {
+	M22f::M22f(float const (&m)[2][2]) {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
@@ -325,7 +329,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	M33f::M33f(float m[3][3]) {
+	M33f::M33f(float const (&m)[3][3]) {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
@@ -442,7 +446,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	M44f::M44f(float m[4][4]) {
+	M44f::M44f(float const (&m)[4][4]) {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
@@ -578,7 +582,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	M23f::M23f(float m[2][3]) {
+	M23f::M23f(float const (&m)[2][3]) {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
@@ -647,7 +651,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	M34f::M34f(float m[3][4]) {
+	M34f::M34f(float const (&m)[3][4]) {
 		memcpy(&this->m, m, sizeof(m));
 	}
 

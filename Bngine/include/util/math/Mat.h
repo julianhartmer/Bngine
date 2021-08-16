@@ -111,7 +111,7 @@ namespace Mat
 
 		M22f(void);
 		M22f(float e11, float e12, float e21, float e22);
-		M22f(float m[2][2]);
+		M22f(float const (&m)[2][2]);
 		M22f(float const (&m)[4]);
 
 		void operator=(M22f mat);
@@ -142,7 +142,7 @@ namespace Mat
 		};
 
 		M33f(void);
-		M33f(float m[3][3]);
+		M33f(float const (&m)[3][3]);
 		M33f(float const (&m)[9]);
 
 		void operator=(M33f mat);
@@ -173,7 +173,7 @@ namespace Mat
 			float m[4][4];
 		};
 		M44f(void);
-		M44f(float m[4][4]);
+		M44f(float const (&m)[4][4]);
 		M44f(float const (&m)[16]);
 
 		M44f operator+(M44f mat);
@@ -200,7 +200,7 @@ namespace Mat
 			float m[2][3];
 		};
 		M23f(void);
-		M23f(float m[2][3]);
+		M23f(float const (&m)[2][3]);
 		M23f(float const (&m)[6]);
 
 		M23f operator+(M23f mat);
@@ -227,7 +227,7 @@ namespace Mat
 			float m[3][4];
 		};
 		M34f(void);
-		M34f(float m[3][4]);
+		M34f(float const (&m)[3][4]);
 		M34f(float const (&m)[12]);
 
 		M34f operator+(M34f mat);

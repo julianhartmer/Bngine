@@ -85,11 +85,13 @@ int main()
 	std::cout << exp2.t() << std::endl;
 
 	M23f exp3 = M23f({ 1,2,3,4,5,6 });
+	M22f exp5 = M22f({ {1,2},{1,2} });
+	V4f exp6 = V4f({ 1,2,3,4 });
 	std::cout << exp3 << std::endl;
 	std::cout << exp3 * v13 << std::endl;
 
 	M44f exp4 = M44f();
-	std::cout << exp4 << std::endl;
+	std::cout << exp6 << std::endl;
 
 	return 1;
 }
