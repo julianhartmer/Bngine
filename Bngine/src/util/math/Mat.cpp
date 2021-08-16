@@ -51,7 +51,7 @@ namespace Mat {
 	V2f V2f::normalized(void) {
 		// TODO throw exception instead of undefined behavior
 		V2f o;
-		float n = this->norm();
+		float n = norm();
 		if (n) {
 			o.x = x / n;
 			o.y = y / n;
@@ -105,6 +105,34 @@ namespace Mat {
 		return (x == v.x && y == v.y && z == v.z);
 	}
 
+	float V3f::dot(V3f v) {
+		return x * v.x + y * v.y + z * v.z;
+	}
+
+	V3f V3f::cross(V3f v) {
+		V3f o;
+		o.x = y * v.z - z * v.y;
+		o.y = z * v.x - x * v.z;
+		o.z = x * v.y - y * v.x;
+		return o;
+	}
+
+	float V3f::norm(void) {
+		return sqrt(x * x + y * y + z * z);
+	}
+
+	V3f V3f::normalized(void) {
+		// TODO throw exception instead of undefined behavior
+		V3f o;
+		float n = norm();
+		if (n) {
+			o.x = x / n;
+			o.y = y / n;
+			o.z = z / n;
+		}
+		return o;
+	}
+
 	std::ostream &operator<<(std::ostream &os, const V3f &v) {
 		return os << "[" << v.x << "; " << std::endl << v.y << "; " << std::endl << v.z << "]";
 	}
@@ -147,6 +175,26 @@ namespace Mat {
 
 	bool V4f::operator==(V3f v) {
 		return (x == v.x && y == v.y && z == v.z);
+	}
+
+	float V4f::dot(V4f v) {
+		// TODO: implement (after looking up how w changes things)
+		return 0;
+	}
+
+	V4f V4f::cross(V4f v) {
+		// TODO: implement (after looking up how w changes things)
+		return v;
+	}
+
+	float V4f::norm(void) {
+		// TODO: implement (after looking up how w changes things)
+		return 0;
+	}
+
+	V4f V4f::normalized(void) {
+		// TODO: implement (after looking up how w changes things)
+		return v;
 	}
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v) {

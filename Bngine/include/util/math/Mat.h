@@ -56,10 +56,10 @@ namespace Mat
 		V3f operator*(float f);
 		bool operator==(V3f v);
 
-		V3f dot(V3f v);
+		float dot(V3f v);
 		V3f cross(V3f v);
 		float norm(void);
-		float normalize(void);
+		V3f normalized(void);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V3f &v);
@@ -90,10 +90,10 @@ namespace Mat
 		bool operator==(V3f v);
 
 		// TODO
-		V4f dot(V4f v);
+		float dot(V4f v);
 		V4f cross(V4f v);
 		float norm(void);
-		float normalize(void);
+		V4f normalized(void);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v);
