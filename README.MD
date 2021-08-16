@@ -1,3 +1,4 @@
+![example branch parameter](https://github.com/ErrorThreeOThree/Bngine/actions/workflows/msbuild.yml/badge.svg?branch=master)
 # :b:ngine
 
 # Setup
