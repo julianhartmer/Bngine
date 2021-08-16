@@ -87,7 +87,7 @@ namespace Mat
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
 		V4f operator*(float f);
-		bool operator==(V3f v);
+		bool operator==(V4f v);
 
 		// TODO
 		float dot(V4f v);

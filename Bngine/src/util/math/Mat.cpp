@@ -177,7 +177,7 @@ namespace Mat {
 		return V4f(f * x, f * y, f * z, f * w);
 	}
 
-	bool V4f::operator==(V3f v) {
+	bool V4f::operator==(V4f v) {
 		return (x == v.x && y == v.y && z == v.z);
 	}
 
