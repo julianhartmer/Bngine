@@ -1,6 +1,5 @@
 #include <math.h>
 #include "util/math/Mat.h"
-#include <stdexcept>
 
 namespace Mat {
 	/////////
