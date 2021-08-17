@@ -56,24 +56,17 @@ namespace Mat {
 	*	\return Normalized Vector (V2f)
 	**/
 	V2f V2f::normalized(void) {
-		try
-		{
-			V2f o;
-			float n = norm();
-			if (n) {
-				o.x = x / n;
-				o.y = y / n;
-			}
-			else
-			{
-				throw std::domain_error("Error: norm of vector equals zero.");
-			}
-			return o;
+		V2f o;
+		float n = norm();
+		if (n) {
+			o.x = x / n;
+			o.y = y / n;
 		}
-		catch (const std::domain_error &e)
+		else
 		{
-			std::cerr << e.what() << std::endl;
-		}	
+			o = V2f(); // norm == 0 only happens when input is also the zero vector
+		}
+		return o;
 	}
 
 	// printing
@@ -142,6 +135,10 @@ namespace Mat {
 			o.x = x / n;
 			o.y = y / n;
 			o.z = z / n;
+		}
+		else
+		{
+			o = V3f(); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
 	}
@@ -231,6 +228,10 @@ namespace Mat {
 			o.y = y / n;
 			o.z = z / n;
 			o.w = 0;
+		}
+		else
+		{
+			o = V4f(); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
 	}
