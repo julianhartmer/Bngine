@@ -49,6 +49,12 @@ namespace Mat {
 		return sqrt(x * x + y * y);
 	}
 
+	/**
+	* 
+	*	Calculates norm, then divides the vector components with it. Will throw an expcetion if norm is 0.
+	* 
+	*	\return Normalized Vector (V2f)
+	**/
 	V2f V2f::normalized(void) {
 		try
 		{
