@@ -1,5 +1,6 @@
 #include <math.h>
 #include "util/math/Mat.h"
+#include <stdexcept>
 
 namespace Mat {
 	/////////
@@ -49,14 +50,24 @@ namespace Mat {
 	}
 
 	V2f V2f::normalized(void) {
-		// TODO throw exception instead of undefined behavior
-		V2f o;
-		float n = norm();
-		if (n) {
-			o.x = x / n;
-			o.y = y / n;
+		try
+		{
+			V2f o;
+			float n = norm();
+			if (n) {
+				o.x = x / n;
+				o.y = y / n;
+			}
+			else
+			{
+				throw std::domain_error("Error: norm of vector equals zero.");
+			}
+			return o;
 		}
-		return o;
+		catch (const std::domain_error &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}	
 	}
 
 	// printing
@@ -110,11 +121,7 @@ namespace Mat {
 	}
 
 	V3f V3f::cross(V3f v) {
-		V3f o;
-		o.x = y * v.z - z * v.y;
-		o.y = z * v.x - x * v.z;
-		o.z = x * v.y - y * v.x;
-		return o;
+		return V3f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 	}
 
 	float V3f::norm(void) {
@@ -163,42 +170,63 @@ namespace Mat {
 		x = v.x;
 		y = v.y;
 		z = v.z;
+		w = v.w;
 	}
 
 	V4f V4f::operator+(V4f v) {
-		return V4f(x + v.x, y + v.y, z + v.z, w + v.w);
+		V4f o(x + v.x, y + v.y, z + v.z, w + v.w);
+		if (o.w > 1)
+		{
+			o = o * (1.0 / o.w);
+			o.w = 1;
+		}
+		return o;
 	}
 
 	V4f V4f::operator-(V4f v) {
-		return V4f(x - v.x, y - v.y, z - v.z, w - v.w);
+		V4f o(x - v.x, y - v.y, z - v.z, w - v.w);
+		// maybe usage like this should cause an exception (v.w == 1 and this.w ==0), would also need to remove the test for this in that case
+		if (o.w == -1)
+		{
+			o.w = 1;
+		}
+		return o;
 	}
 
 	V4f V4f::operator*(float f) {
-		return V4f(f * x, f * y, f * z, f * w);
+		// maybe disallow this if w==1? (positions ought to be changed by displacements, not by scaling them)
+		return V4f(f * x, f * y, f * z, w);
 	}
 
 	bool V4f::operator==(V4f v) {
-		return (x == v.x && y == v.y && z == v.z);
+		return (x == v.x && y == v.y && z == v.z && w == v.w);
 	}
 
 	float V4f::dot(V4f v) {
-		// TODO: implement (after looking up how w changes things)
-		return 0;
+		// maybe throw exception when w==1?
+		return x * v.x + y * v.y + z * v.z;
 	}
 
 	V4f V4f::cross(V4f v) {
-		// TODO: implement (after looking up how w changes things)
-		return v;
+		// maybe throw exception when w==1?
+		return V4f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x, 0);
 	}
 
 	float V4f::norm(void) {
-		// TODO: implement (after looking up how w changes things)
-		return 0;
+		return sqrt(x * x + y * y + z * z);
 	}
 
 	V4f V4f::normalized(void) {
-		// TODO: implement (after looking up how w changes things)
-		return v;
+		// maybe throw exception when w==1?
+		V4f o;
+		float n = norm();
+		if (n) {
+			o.x = x / n;
+			o.y = y / n;
+			o.z = z / n;
+			o.w = 0;
+		}
+		return o;
 	}
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v) {

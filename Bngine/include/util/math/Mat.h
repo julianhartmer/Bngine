@@ -81,15 +81,12 @@ namespace Mat
 		V4f(float x, float y, float z, float w);
 		V4f(float v[4]);
 
-		// TODO: study the use of w
-		// relevant for all those operators and methods
 		void operator=(V4f v);
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
 		V4f operator*(float f);
 		bool operator==(V4f v);
 
-		// TODO
 		float dot(V4f v);
 		V4f cross(V4f v);
 		float norm(void);
