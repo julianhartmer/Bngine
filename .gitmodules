@@ -1,0 +1,3 @@
+[submodule "BnginePerformance/lib/hayai"]
+	path = BnginePerformance/lib/hayai
+	url = https://github.com/nickbruun/hayai
