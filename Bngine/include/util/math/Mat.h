@@ -24,6 +24,7 @@ namespace Mat
 		V2f operator+(V2f v);
 		V2f operator-(V2f v);
 		V2f operator*(float f);
+		V2f operator/(float f);
 		bool operator==(V2f v);
 
 		// methods
@@ -54,6 +55,7 @@ namespace Mat
 		V3f operator+(V3f v);
 		V3f operator-(V3f v);
 		V3f operator*(float f);
+		V3f operator/(float f);
 		bool operator==(V3f v);
 
 		float dot(V3f v);
@@ -85,6 +87,7 @@ namespace Mat
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
 		V4f operator*(float f);
+		V4f operator/(float f);
 		bool operator==(V4f v);
 
 		float dot(V4f v);
@@ -115,6 +118,7 @@ namespace Mat
 		M22f operator+(M22f mat);
 		M22f operator-(M22f mat);
 		M22f operator*(float f);
+		M22f operator/(float f);
 		V2f operator*(V2f v);
 		M22f operator*(M22f mat);
 
@@ -146,6 +150,7 @@ namespace Mat
 		M33f operator+(M33f mat);
 		M33f operator-(M33f mat);
 		M33f operator*(float f);
+		M33f operator/(float f);
 		V3f operator*(V3f v);
 		M33f operator*(M33f mat);
 
@@ -176,6 +181,7 @@ namespace Mat
 		M44f operator+(M44f mat);
 		M44f operator-(M44f mat);
 		M44f operator*(float f);
+		M44f operator/(float f);
 		V4f operator*(V4f v);
 		M44f operator*(M44f mat);
 
@@ -203,6 +209,7 @@ namespace Mat
 		M23f operator+(M23f mat);
 		M23f operator-(M23f mat);
 		M23f operator*(float f);
+		M23f operator/(float f);
 		V2f operator*(V3f v);
 		//M23f operator*(M23f mat); // no use case so far
 
@@ -230,6 +237,7 @@ namespace Mat
 		M34f operator+(M34f mat);
 		M34f operator-(M34f mat);
 		M34f operator*(float f);
+		M34f operator/(float f);
 		V3f operator*(V4f v);
 		//M34f operator*(M34f mat); // no use case so far
 

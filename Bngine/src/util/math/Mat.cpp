@@ -36,6 +36,10 @@ namespace Mat {
 		return V2f(f * x, f * y);;
 	}
 
+	V2f V2f::operator/(float f) {
+		return V2f(x / f, y / f);;
+	}
+
 	bool V2f::operator==(V2f v) {
 		return (x == v.x && y == v.y);
 	}
@@ -58,8 +62,7 @@ namespace Mat {
 		V2f o;
 		float n = norm();
 		if (n) {
-			o.x = x / n;
-			o.y = y / n;
+			o = *this / n;
 		}
 		else
 		{
@@ -110,6 +113,10 @@ namespace Mat {
 		return V3f(x * f, y * f, z * f);
 	}
 
+	V3f V3f::operator/(float f) {
+		return V3f(x / f, y / f, z / f);
+	}
+
 	bool V3f::operator==(V3f v) {
 		return (x == v.x && y == v.y && z == v.z);
 	}
@@ -131,9 +138,7 @@ namespace Mat {
 		V3f o;
 		float n = norm();
 		if (n) {
-			o.x = x / n;
-			o.y = y / n;
-			o.z = z / n;
+			o = *this / n;
 		}
 		else
 		{
@@ -200,6 +205,11 @@ namespace Mat {
 		return V4f(f * x, f * y, f * z, w);
 	}
 
+	V4f V4f::operator/(float f) {
+		// maybe disallow this if w==1? (positions ought to be changed by displacements, not by scaling them)
+		return V4f(x / f, y / f, z / f, w);
+	}
+
 	bool V4f::operator==(V4f v) {
 		return (x == v.x && y == v.y && z == v.z && w == v.w);
 	}
@@ -223,9 +233,7 @@ namespace Mat {
 		V4f o;
 		float n = norm();
 		if (n) {
-			o.x = x / n;
-			o.y = y / n;
-			o.z = z / n;
+			o = *this / n;
 			o.w = 0;
 		}
 		else
@@ -304,6 +312,18 @@ namespace Mat {
 			for (int x = 0; x < 2; x++)
 			{
 				o.m[y][x] = m[y][x] * f;
+			}
+		}
+		return o;
+	}
+
+	M22f M22f::operator/(float f) {
+		M22f o;
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 2; x++)
+			{
+				o.m[y][x] = m[y][x] / f;
 			}
 		}
 		return o;
@@ -417,6 +437,18 @@ namespace Mat {
 		return o;
 	}
 
+	M33f M33f::operator/(float f) {
+		M33f o;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				o.m[y][x] = m[y][x] / f;
+			}
+		}
+		return o;
+	}
+
 	V3f M33f::operator*(V3f v) {
 		V3f o;
 		for (int y = 0; y < 3; y++)
@@ -519,6 +551,18 @@ namespace Mat {
 			for (int x = 0; x < 4; x++)
 			{
 				o.m[y][x] = m[y][x] * f;
+			}
+		}
+		return o;
+	}
+
+	M44f M44f::operator/(float f) {
+		M44f o;
+		for (int y = 0; y < 4; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				o.m[y][x] = m[y][x] / f;
 			}
 		}
 		return o;
@@ -660,6 +704,18 @@ namespace Mat {
 		return o;
 	}
 
+	M23f M23f::operator/(float f) {
+		M23f o;
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				o.m[y][x] = m[y][x] / f;
+			}
+		}
+		return o;
+	}
+
 	V2f M23f::operator*(V3f v) {
 		V2f o;
 		for (int y = 0; y < 2; y++)
@@ -724,6 +780,18 @@ namespace Mat {
 			for (int x = 0; x < 4; x++)
 			{
 				o.m[y][x] = m[y][x] * f;
+			}
+		}
+		return o;
+	}
+
+	M34f M34f::operator/(float f) {
+		M34f o;
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				o.m[y][x] = m[y][x] / f;
 			}
 		}
 		return o;
