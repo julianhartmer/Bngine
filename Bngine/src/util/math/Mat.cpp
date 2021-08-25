@@ -66,7 +66,7 @@ namespace Mat {
 		}
 		else
 		{
-			o = V2f(); // norm == 0 only happens when input is also the zero vector
+			o = V2f(0, 0); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
 	}
@@ -142,7 +142,7 @@ namespace Mat {
 		}
 		else
 		{
-			o = V3f(); // norm == 0 only happens when input is also the zero vector
+			o = V3f(0, 0, 0); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
 	}
@@ -238,7 +238,7 @@ namespace Mat {
 		}
 		else
 		{
-			o = V4f(); // norm == 0 only happens when input is also the zero vector
+			o = V4f(0, 0, 0, 0); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
 	}
