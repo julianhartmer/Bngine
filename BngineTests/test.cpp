@@ -25,6 +25,7 @@ TEST(Mat, V2foperators) {
 
 	EXPECT_VF_EQ((v2 - v1), V2f({ 2.0f, 2.0f }));
 	EXPECT_VF_EQ((v2 * 2), V2f({ 6.0f, 8.0f }));
+	EXPECT_VF_EQ((v2 / 2), V2f({ 1.5f, 2.0f }));
 	EXPECT_VF_EQ((v1 + v2), V2f({ 4.0f, 6.0f }));
 
 	EXPECT_FALSE(v1 == v2);
@@ -53,6 +54,7 @@ TEST(Mat, V3foperators) {
 
 	EXPECT_VF_EQ((v2 - v1), V3f({ 3.0f, 3.0f, 3.0f }));
 	EXPECT_VF_EQ((v2 * 2), V3f({ 8.0f, 10.0f, 12.0f }));
+	EXPECT_VF_EQ((v2 / 2), V3f({ 2.0f, 2.5f, 3.0f }));
 	EXPECT_VF_EQ((v2 + v1), V3f({ 5.0f, 7.0f, 9.0f }));
 
 	EXPECT_FALSE(v1 == v2);
@@ -102,8 +104,10 @@ TEST(Mat, V4foperators) {
 
 	// scaling position = position
 	EXPECT_VF_EQ((v1 * 2), V4f({ 6.0f, 8.4f, 6.6f, 1.0f }));
+	EXPECT_VF_EQ((v1 / 2), V4f({ 1.5f, 2.1f, 1.65f, 1.0f }));
 	// scaling displacement = displacement
 	EXPECT_VF_EQ((v2 * 2), V4f({ 20.0f, 10.0f, 40.0f, 0.0f }));
+	EXPECT_VF_EQ((v2 / 2), V4f({ 5.0f, 2.5f, 10.0f, 0.0f }));
 
 	EXPECT_FALSE(v1 == v2);
 	res = v1;
@@ -149,6 +153,7 @@ TEST(Mat, Mat22operators) {
 	EXPECT_MF_EQ((a - b), M22f({ {0.5f, 0.5f}, {0.5f, 0.5f} }));
 	EXPECT_MF_EQ((a + b), M22f({ {1.5f, 3.5f}, {5.5f, 7.5f} }));
 	EXPECT_MF_EQ((a * 2), M22f({ {2.0f, 4.0f}, {6.0f, 8.0f} }));
+	EXPECT_MF_EQ((a / 2), M22f({ {0.5f, 1.0f}, {1.5f, 2.0f} }));
 	EXPECT_VF_EQ((a * V2f(3.0f, 7.0f)), V2f(17.0f, 37.0f));
 	EXPECT_MF_EQ((a * b), M22f({ {5.5f, 8.5f}, {11.5f, 18.5f} }));
 }
@@ -166,6 +171,7 @@ TEST(Mat, Mat33operators) {
 	EXPECT_MF_EQ((a - b), M33f({ {0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f} }));
 	EXPECT_MF_EQ((a + b), M33f({ {1.5f, 3.5f, 5.5f}, {7.5f, 9.5f, 11.5f}, {13.5f, 15.5f, 17.5f} }));
 	EXPECT_MF_EQ((a * 2), M33f({ 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f, 18.0f }));
+	EXPECT_MF_EQ((a / 2), M33f({ 0.5f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f }));
 	EXPECT_VF_EQ((a * V3f(3.0f, 7.0f, 11.0f)), V3f(50.0f, 113.0f, 176.0f));
 	EXPECT_MF_EQ((a * b), M33f({ {27.0f, 33.0f, 39.0f}, {58.5f, 73.5f, 88.5f}, {90.0f, 114.0f, 138.0f} }));
 }
@@ -183,6 +189,7 @@ TEST(Mat, Mat44operators) {
 	EXPECT_MF_EQ((a - b), M44f({ {0.5f, 0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f, 0.5f} }));
 	EXPECT_MF_EQ((a + b), M44f({ {1.5f, 3.5f, 5.5f, 7.5f}, {9.5f, 11.5f, 13.5f, 15.5f}, {17.5f, 19.5f, 21.5f, 23.5f}, {25.5f, 27.5f, 29.5f, 31.5f} }));
 	EXPECT_MF_EQ((a * 2), M44f({ 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f, 18.0f, 20.0f, 22.0f, 24.0f, 26.0f, 28.0f, 30.0f, 32.0f }));
+	EXPECT_MF_EQ((a / 2), M44f({ 0.5f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f, 5.0f, 5.5f, 6.0f, 6.5f, 7.0f, 7.5f, 8.0f }));
 	EXPECT_VF_EQ((a * V4f(3.0f, 7.0f, 11.0f, 0.0f)), V4f(50.0f, 134.0f, 218.0f, 302.0f));
 	EXPECT_MF_EQ((a * b), M44f({ {85.0f, 95.0f, 105.0f, 115.0f}, {189.0f, 215.0f, 241.0f, 267.0f}, {293.0f, 335.0f, 377.0f, 419.0f}, {397.0f, 455.0f, 513.0f, 571.0f} }));
 }
@@ -200,6 +207,7 @@ TEST(Mat, Mat23operators) {
 	EXPECT_MF_EQ((a - b), M23f( {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f} ));
 	EXPECT_MF_EQ((a + b), M23f( {1.5f, 3.5f, 5.5f, 7.5f, 9.5f, 11.5f} ));
 	EXPECT_MF_EQ((a * 2), M23f({ 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f }));
+	EXPECT_MF_EQ((a / 2), M23f({ 0.5f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f }));
 	EXPECT_VF_EQ((a * V3f(3.0f, 7.0f, 11.0f)), V2f(50.0f, 113.0f));
 }
 
@@ -214,6 +222,7 @@ TEST(Mat, Mat34operators) {
 	EXPECT_MF_EQ((a - b), M34f({ 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f}));
 	EXPECT_MF_EQ((a + b), M34f({ 1.5f, 3.5f, 5.5f, 7.5f, 9.5f, 11.5f, 13.5f, 15.5f, 17.5f, 19.5f, 21.5f, 23.5f }));
 	EXPECT_MF_EQ((a * 2), M34f({ 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f, 18.0f, 20.0f, 22.0f, 24.0f }));
+	EXPECT_MF_EQ((a / 2), M34f({ 0.5f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f, 5.0f, 5.5f, 6.0f }));
 	EXPECT_VF_EQ((a * V4f(3.0f, 7.0f, 11.0f, 0.0f)), V3f(50.0f, 134.0f, 218.0f));
 }
 
