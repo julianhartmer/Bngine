@@ -54,7 +54,7 @@ namespace Mat {
 
 	/**
 	* 
-	*	Calculates norm, then divides the vector components with it. Will throw an expcetion if norm is 0.
+	*	Calculates norm, then divides the vector components with it. Will return the zero vector if norm is 0.
 	* 
 	*	\return Normalized Vector (V2f)
 	**/
@@ -133,6 +133,12 @@ namespace Mat {
 		return sqrt(x * x + y * y + z * z);
 	}
 
+	/**
+	*
+	*	Calculates norm, then divides the vector components with it. Will return the zero vector if norm is 0.
+	*
+	*	\return Normalized Vector (V3f)
+	**/
 	V3f V3f::normalized(void) {
 		// TODO throw exception instead of undefined behavior
 		V3f o;
@@ -228,6 +234,13 @@ namespace Mat {
 		return sqrt(x * x + y * y + z * z);
 	}
 
+	/**
+	*
+	*	Calculates norm, then divides the vector components with it. Will return the zero vector if norm is 0.
+	*	w component will always be returned as 0, i.e. the output will be a displacement.
+	*
+	*	\return Normalized Vector (V4f)
+	**/
 	V4f V4f::normalized(void) {
 		// maybe throw exception when w==1?
 		V4f o;
@@ -605,6 +618,12 @@ namespace Mat {
 		return (this->_11 * this->minor(1, 1).det() - this->_12 * this->minor(1, 2).det() + this->_13 * this->minor(1, 3).det() - this->_14 * this->minor(1, 4).det());
 	}
 
+	/**
+	*
+	*	Returns the row-col-minor of the 4x4 matrix, i.e. the 3x3 submatrix that does not contain row and col.
+	*
+	*	\return row-col-minor of calling matrix (M33f)
+	**/
 	M33f M44f::minor(int row, int col) {
 		// TODO: catch invalid row and col values
 		M33f o;
