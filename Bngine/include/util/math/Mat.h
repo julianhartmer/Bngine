@@ -24,6 +24,7 @@ namespace Mat
 		V2f operator+(V2f v);
 		V2f operator-(V2f v);
 		V2f operator*(float f);
+		V2f operator/(float f);
 		bool operator==(V2f v);
 
 		// methods
@@ -54,12 +55,13 @@ namespace Mat
 		V3f operator+(V3f v);
 		V3f operator-(V3f v);
 		V3f operator*(float f);
+		V3f operator/(float f);
 		bool operator==(V3f v);
 
-		V3f dot(V3f v);
+		float dot(V3f v);
 		V3f cross(V3f v);
 		float norm(void);
-		float normalize(void);
+		V3f normalized(void);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V3f &v);
@@ -81,19 +83,17 @@ namespace Mat
 		V4f(float x, float y, float z, float w);
 		V4f(float v[4]);
 
-		// TODO: study the use of w
-		// relevant for all those operators and methods
 		void operator=(V4f v);
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
 		V4f operator*(float f);
-		bool operator==(V3f v);
+		V4f operator/(float f);
+		bool operator==(V4f v);
 
-		// TODO
-		V4f dot(V4f v);
+		float dot(V4f v);
 		V4f cross(V4f v);
 		float norm(void);
-		float normalize(void);
+		V4f normalized(void);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v);
@@ -111,12 +111,14 @@ namespace Mat
 
 		M22f(void);
 		M22f(float e11, float e12, float e21, float e22);
-		M22f(float m[2][2]);
+		M22f(float const (&m)[2][2]);
+		M22f(float const (&m)[4]);
 
 		void operator=(M22f mat);
 		M22f operator+(M22f mat);
 		M22f operator-(M22f mat);
 		M22f operator*(float f);
+		M22f operator/(float f);
 		V2f operator*(V2f v);
 		M22f operator*(M22f mat);
 
@@ -141,12 +143,14 @@ namespace Mat
 		};
 
 		M33f(void);
-		M33f(float m[3][3]);
+		M33f(float const (&m)[3][3]);
+		M33f(float const (&m)[9]);
 
 		void operator=(M33f mat);
 		M33f operator+(M33f mat);
 		M33f operator-(M33f mat);
 		M33f operator*(float f);
+		M33f operator/(float f);
 		V3f operator*(V3f v);
 		M33f operator*(M33f mat);
 
@@ -171,19 +175,76 @@ namespace Mat
 			float m[4][4];
 		};
 		M44f(void);
-		M44f(float m[4][4]);
-
+		M44f(float const (&m)[4][4]);
+		M44f(float const (&m)[16]);
 
 		M44f operator+(M44f mat);
 		M44f operator-(M44f mat);
 		M44f operator*(float f);
+		M44f operator/(float f);
 		V4f operator*(V4f v);
 		M44f operator*(M44f mat);
 
 		float trace(void);
 		M44f t(void);
 		float det(void);
+		M33f minor(int row, int col);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const M44f &m);
+
+	struct M23f
+	{
+		union {
+			struct {
+				float _11, _12, _13;
+				float _21, _22, _23;
+			};
+			float m[2][3];
+		};
+		M23f(void);
+		M23f(float const (&m)[2][3]);
+		M23f(float const (&m)[6]);
+
+		M23f operator+(M23f mat);
+		M23f operator-(M23f mat);
+		M23f operator*(float f);
+		M23f operator/(float f);
+		V2f operator*(V3f v);
+		//M23f operator*(M23f mat); // no use case so far
+
+		//float trace(void); // does not exist
+		//M32f t(void); // no use case so far
+		//float det(void); // does not exist
+	};
+
+	std::ostream& operator<<(std::ostream& os, const M23f& m);
+
+	struct M34f
+	{
+		union {
+			struct {
+				float _11, _12, _13, _14;
+				float _21, _22, _23, _24;
+				float _31, _32, _33, _34;
+			};
+			float m[3][4];
+		};
+		M34f(void);
+		M34f(float const (&m)[3][4]);
+		M34f(float const (&m)[12]);
+
+		M34f operator+(M34f mat);
+		M34f operator-(M34f mat);
+		M34f operator*(float f);
+		M34f operator/(float f);
+		V3f operator*(V4f v);
+		//M34f operator*(M34f mat); // no use case so far
+
+		//float trace(void); // does not exist
+		//M43f t(void); // no use case so far
+		//float det(void); // does not exist
+	};
+
+	std::ostream& operator<<(std::ostream& os, const M34f& m);
 }

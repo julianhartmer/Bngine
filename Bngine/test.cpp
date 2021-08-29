@@ -74,5 +74,25 @@ int main()
 	std::cout << mat13 * v13 << std::endl;
 	std::cout << v1.norm() << std::endl;
 
+	M33f exp = M33f({ 1,2,3,4,5,6,7,8,9 });
+	std::cout << exp.det() << std::endl;
+	std::cout << exp << std::endl;
+
+	M44f exp2 = M44f({ 5,4,3,1,9,1,0,12,5,6,7,8,1,5,1,3 });
+	std::cout << exp2 << std::endl;
+	std::cout << exp2.det() << std::endl;
+	std::cout << exp2.trace() << std::endl;
+	std::cout << exp2.t() << std::endl;
+
+	M23f exp3 = M23f({ 1,2,3,4,5,6 });
+	M22f exp5 = M22f({ {1,2},{1,2} });
+	V4f exp6 = V4f({ 1,2,3,4 });
+	std::cout << exp3 << std::endl;
+	std::cout << exp3 * v13 << std::endl;
+
+	M44f exp4 = M44f();
+	std::cout << exp6 << std::endl;
+
 	return 1;
 }
+
