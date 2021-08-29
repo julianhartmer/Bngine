@@ -621,11 +621,13 @@ namespace Mat {
 	/**
 	*
 	*	Returns the row-col-minor of the 4x4 matrix, i.e. the 3x3 submatrix that does not contain row and col.
+	*   Throws out_of_range exception if index invalid.
 	*
 	*	\return row-col-minor of calling matrix (M33f)
 	**/
 	M33f M44f::minor(int row, int col) {
-		// TODO: catch invalid row and col values
+		if (1 > row || row > 4 || 1 > col || col > 4)
+			throw std::out_of_range ("Index out of range");
 		M33f o;
 		// skip the minor row and col via offsets that are added to the array access
 		int offset_x = 0;
