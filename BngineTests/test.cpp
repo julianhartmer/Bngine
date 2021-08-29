@@ -31,6 +31,8 @@ TEST(Mat, V2foperators) {
 	EXPECT_FALSE(v1 == v2);
 	res = v1;
 	EXPECT_TRUE(v1 == res);
+	EXPECT_TRUE(isinf((v1 / 0).x));
+	EXPECT_TRUE(isinf((v1 / 0).y));
 }
 
 TEST(Mat, V2fmethods) {
@@ -61,6 +63,9 @@ TEST(Mat, V3foperators) {
 
 	res = v1;
 	EXPECT_TRUE(v1 == res);
+	EXPECT_TRUE(isinf((v1 / 0).x));
+	EXPECT_TRUE(isinf((v1 / 0).y));
+	EXPECT_TRUE(isinf((v1 / 0).z));
 }
 
 TEST(Mat, V3fmethods) {
@@ -108,6 +113,10 @@ TEST(Mat, V4foperators) {
 	// scaling displacement = displacement
 	EXPECT_VF_EQ((v2 * 2), V4f({ 20.0f, 10.0f, 40.0f, 0.0f }));
 	EXPECT_VF_EQ((v2 / 2), V4f({ 5.0f, 2.5f, 10.0f, 0.0f }));
+
+	EXPECT_TRUE(isinf((v1 / 0).x));
+	EXPECT_TRUE(isinf((v1 / 0).y));
+	EXPECT_TRUE(isinf((v1 / 0).z));
 
 	EXPECT_FALSE(v1 == v2);
 	res = v1;
