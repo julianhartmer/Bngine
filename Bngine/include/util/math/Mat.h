@@ -188,8 +188,7 @@ namespace Mat
 		float trace(void);
 		M44f t(void);
 		float det(void);
-		private:
-			M33f minor(int row, int col);
+		M33f minor(int row, int col);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const M44f &m);
