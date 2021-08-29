@@ -140,7 +140,6 @@ namespace Mat {
 	*	\return Normalized Vector (V3f)
 	**/
 	V3f V3f::normalized(void) {
-		// TODO throw exception instead of undefined behavior
 		V3f o;
 		float n = norm();
 		if (n) {
@@ -625,7 +624,6 @@ namespace Mat {
 	*	\return row-col-minor of calling matrix (M33f)
 	**/
 	M33f M44f::minor(int row, int col) {
-		// TODO: catch invalid row and col values
 		M33f o;
 		// skip the minor row and col via offsets that are added to the array access
 		int offset_x = 0;
