@@ -31,6 +31,14 @@ TEST(Mat, V2foperators) {
 	EXPECT_FALSE(v1 == v2);
 	res = v1;
 	EXPECT_TRUE(v1 == res);
+	res += v1;
+	EXPECT_VF_EQ((v1 * 2), res);
+	res -= v1;
+	EXPECT_VF_EQ(res, v1);
+	res *= 2;
+	EXPECT_VF_EQ((v1 * 2), res);
+	res /= 2;
+	EXPECT_VF_EQ(v1, res);
 	EXPECT_TRUE(isinf((v1 / 0).x));
 	EXPECT_TRUE(isinf((v1 / 0).y));
 }
@@ -63,6 +71,14 @@ TEST(Mat, V3foperators) {
 
 	res = v1;
 	EXPECT_TRUE(v1 == res);
+	res += v1;
+	EXPECT_VF_EQ((v1 * 2), res);
+	res -= v1;
+	EXPECT_VF_EQ(res, v1);
+	res *= 2;
+	EXPECT_VF_EQ((v1 * 2), res);
+	res /= 2;
+	EXPECT_VF_EQ(v1, res);
 	EXPECT_TRUE(isinf((v1 / 0).x));
 	EXPECT_TRUE(isinf((v1 / 0).y));
 	EXPECT_TRUE(isinf((v1 / 0).z));
@@ -121,6 +137,15 @@ TEST(Mat, V4foperators) {
 	EXPECT_FALSE(v1 == v2);
 	res = v1;
 	EXPECT_TRUE(v1 == res);
+	res += v1;
+	EXPECT_VF_EQ(v1, res);
+	res -= v1;
+	EXPECT_VF_EQ(res, V4f(0,0,0,0));
+	res += v1;
+	res *= 2;
+	EXPECT_VF_EQ((v1 * 2), res);
+	res /= 2;
+	EXPECT_VF_EQ(v1, res);
 }
 
 TEST(Mat, V4fmethods) {

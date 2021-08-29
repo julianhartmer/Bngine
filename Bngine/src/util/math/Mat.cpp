@@ -25,19 +25,35 @@ namespace Mat {
 	}
 
 	V2f V2f::operator+(V2f v) {
-		return V2f(x + v.x, y + v.y);;
+		return V2f(x + v.x, y + v.y);
 	}
 
 	V2f V2f::operator-(V2f v) {
-		return V2f(x - v.x, y - v.y);;
+		return V2f(x - v.x, y - v.y);
 	}
 
 	V2f V2f::operator*(float f) {
-		return V2f(f * x, f * y);;
+		return V2f(f * x, f * y);
 	}
 
 	V2f V2f::operator/(float f) {
-		return V2f(x / f, y / f);;
+		return V2f(x / f, y / f);
+	}
+
+	void V2f::operator+=(V2f v) {
+		*this = (*this + v);
+	}
+
+	void  V2f::operator-=(V2f v) {
+		*this = (*this - v);
+	}
+
+	void  V2f::operator*=(float f) {
+		*this = (*this * f);
+	}
+
+	void  V2f::operator/=(float f) {
+		*this = (*this / f);
 	}
 
 	bool V2f::operator==(V2f v) {
@@ -115,6 +131,22 @@ namespace Mat {
 
 	V3f V3f::operator/(float f) {
 		return V3f(x / f, y / f, z / f);
+	}
+
+	void V3f::operator+=(V3f v) {
+		*this = (*this + v);
+	}
+
+	void  V3f::operator-=(V3f v) {
+		*this = (*this - v);
+	}
+
+	void  V3f::operator*=(float f) {
+		*this = (*this * f);
+	}
+
+	void  V3f::operator/=(float f) {
+		*this = (*this / f);
 	}
 
 	bool V3f::operator==(V3f v) {
@@ -213,6 +245,22 @@ namespace Mat {
 	V4f V4f::operator/(float f) {
 		// maybe disallow this if w==1? (positions ought to be changed by displacements, not by scaling them)
 		return V4f(x / f, y / f, z / f, w);
+	}
+
+	void V4f::operator+=(V4f v) {
+		*this = (*this + v);
+	}
+
+	void V4f::operator-=(V4f v) {
+		*this = (*this - v);
+	}
+
+	void V4f::operator*=(float f) {
+		*this = (*this * f);
+	}
+
+	void V4f::operator/=(float f) {
+		*this = (*this / f);
 	}
 
 	bool V4f::operator==(V4f v) {

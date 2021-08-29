@@ -25,6 +25,10 @@ namespace Mat
 		V2f operator-(V2f v);
 		V2f operator*(float f);
 		V2f operator/(float f);
+		void operator+=(V2f v);
+		void operator-=(V2f v);
+		void operator*=(float f);
+		void operator/=(float f);
 		bool operator==(V2f v);
 
 		// methods
@@ -56,6 +60,10 @@ namespace Mat
 		V3f operator-(V3f v);
 		V3f operator*(float f);
 		V3f operator/(float f);
+		void operator+=(V3f v);
+		void operator-=(V3f v);
+		void operator*=(float f);
+		void operator/=(float f);
 		bool operator==(V3f v);
 
 		float dot(V3f v);
@@ -88,6 +96,10 @@ namespace Mat
 		V4f operator-(V4f v);
 		V4f operator*(float f);
 		V4f operator/(float f);
+		void operator+=(V4f v);
+		void operator-=(V4f v);
+		void operator*=(float f);
+		void operator/=(float f);
 		bool operator==(V4f v);
 
 		float dot(V4f v);
