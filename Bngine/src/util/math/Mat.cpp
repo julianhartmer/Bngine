@@ -19,9 +19,10 @@ namespace Mat {
 		y = 0;
 	}
 
-	void V2f::operator=(V2f v) {
+	V2f& V2f::operator=(V2f v) {
 		x = v.x;
 		y = v.y;
+		return *this;
 	}
 
 	V2f V2f::operator+(V2f v) {
@@ -40,20 +41,24 @@ namespace Mat {
 		return V2f(x / f, y / f);
 	}
 
-	void V2f::operator+=(V2f v) {
+	V2f& V2f::operator+=(V2f v) {
 		*this = (*this + v);
+		return *this;
 	}
 
-	void  V2f::operator-=(V2f v) {
+	V2f& V2f::operator-=(V2f v) {
 		*this = (*this - v);
+		return *this;
 	}
 
-	void  V2f::operator*=(float f) {
+	V2f& V2f::operator*=(float f) {
 		*this = (*this * f);
+		return *this;
 	}
 
-	void  V2f::operator/=(float f) {
+	V2f& V2f::operator/=(float f) {
 		*this = (*this / f);
+		return *this;
 	}
 
 	bool V2f::operator==(V2f v) {
@@ -111,10 +116,11 @@ namespace Mat {
 		memcpy (&this->v, &v, sizeof (v));
 	}
 
-	void V3f::operator=(V3f v) {
+	V3f& V3f::operator=(V3f v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
+		return *this;
 	}
 
 	V3f V3f::operator+(V3f v) {
@@ -133,20 +139,24 @@ namespace Mat {
 		return V3f(x / f, y / f, z / f);
 	}
 
-	void V3f::operator+=(V3f v) {
+	V3f& V3f::operator+=(V3f v) {
 		*this = (*this + v);
+		return *this;
 	}
 
-	void  V3f::operator-=(V3f v) {
+	V3f& V3f::operator-=(V3f v) {
 		*this = (*this - v);
+		return *this;
 	}
 
-	void  V3f::operator*=(float f) {
+	V3f& V3f::operator*=(float f) {
 		*this = (*this * f);
+		return *this;
 	}
 
-	void  V3f::operator/=(float f) {
+	V3f& V3f::operator/=(float f) {
 		*this = (*this / f);
+		return *this;
 	}
 
 	bool V3f::operator==(V3f v) {
@@ -210,11 +220,12 @@ namespace Mat {
 		memcpy (&this->v, &v, sizeof (v));
 	}
 
-	void V4f::operator=(V4f v) {
+	V4f& V4f::operator=(V4f v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 		w = v.w;
+		return *this;
 	}
 
 	V4f V4f::operator+(V4f v) {
@@ -247,20 +258,24 @@ namespace Mat {
 		return V4f(x / f, y / f, z / f, w);
 	}
 
-	void V4f::operator+=(V4f v) {
+	V4f& V4f::operator+=(V4f v) {
 		*this = (*this + v);
+		return *this;
 	}
 
-	void V4f::operator-=(V4f v) {
+	V4f& V4f::operator-=(V4f v) {
 		*this = (*this - v);
+		return *this;
 	}
 
-	void V4f::operator*=(float f) {
+	V4f& V4f::operator*=(float f) {
 		*this = (*this * f);
+		return *this;
 	}
 
-	void V4f::operator/=(float f) {
+	V4f& V4f::operator/=(float f) {
 		*this = (*this / f);
+		return *this;
 	}
 
 	bool V4f::operator==(V4f v) {
@@ -331,7 +346,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	void M22f::operator=(M22f mat) {
+	M22f& M22f::operator=(M22f mat) {
 		for (int y = 0; y < 2; y++)
 		{
 			for (int x = 0; x < 2; x++)
@@ -339,6 +354,7 @@ namespace Mat {
 				m[y][x] = mat.m[y][x];
 			}
 		}
+		return *this;
 	}
 
 	M22f M22f::operator+(M22f mat) {
@@ -451,7 +467,7 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
-	void M33f::operator=(M33f mat) {
+	M33f& M33f::operator=(M33f mat) {
 		for (int y = 0; y < 3; y++)
 		{
 			for (int x = 0; x < 3; x++)
@@ -459,6 +475,7 @@ namespace Mat {
 				m[y][x] = mat.m[y][x];
 			}
 		}
+		return *this;
 	}
 
 	M33f M33f::operator+(M33f mat) {
@@ -578,6 +595,17 @@ namespace Mat {
 
 	M44f::M44f(float const (&m)[16]) {
 		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M44f& M44f::operator=(M44f mat) {
+		for (int y = 0; y < 4; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				m[y][x] = mat.m[y][x];
+			}
+		}
+		return *this;
 	}
 
 	M44f M44f::operator+(M44f mat) {
@@ -736,6 +764,17 @@ namespace Mat {
 		memcpy(&this->m, m, sizeof(m));
 	}
 
+	M23f& M23f::operator=(M23f mat) {
+		for (int y = 0; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				m[y][x] = mat.m[y][x];
+			}
+		}
+		return *this;
+	}
+
 	M23f M23f::operator+(M23f mat) {
 		M23f o;
 		for (int y = 0; y < 2; y++)
@@ -815,6 +854,17 @@ namespace Mat {
 
 	M34f::M34f(float const (&m)[12]) {
 		memcpy(&this->m, m, sizeof(m));
+	}
+
+	M34f& M34f::operator=(M34f mat) {
+		for (int y = 0; y < 3; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				m[y][x] = mat.m[y][x];
+			}
+		}
+		return *this;
 	}
 
 	M34f M34f::operator+(M34f mat) {

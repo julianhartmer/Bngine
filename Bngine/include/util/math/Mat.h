@@ -20,15 +20,15 @@ namespace Mat
 		V2f(void);
 
 		// operators
-		void operator=(V2f v);
+		V2f& operator=(V2f v);
 		V2f operator+(V2f v);
 		V2f operator-(V2f v);
 		V2f operator*(float f);
 		V2f operator/(float f);
-		void operator+=(V2f v);
-		void operator-=(V2f v);
-		void operator*=(float f);
-		void operator/=(float f);
+		V2f& operator+=(V2f v);
+		V2f& operator-=(V2f v);
+		V2f& operator*=(float f);
+		V2f& operator/=(float f);
 		bool operator==(V2f v);
 
 		// methods
@@ -55,15 +55,15 @@ namespace Mat
 		V3f(float x, float y, float z);
 		V3f(float v[3]);
 
-		void operator=(V3f v);
+		V3f& operator=(V3f v);
 		V3f operator+(V3f v);
 		V3f operator-(V3f v);
 		V3f operator*(float f);
 		V3f operator/(float f);
-		void operator+=(V3f v);
-		void operator-=(V3f v);
-		void operator*=(float f);
-		void operator/=(float f);
+		V3f& operator+=(V3f v);
+		V3f& operator-=(V3f v);
+		V3f& operator*=(float f);
+		V3f& operator/=(float f);
 		bool operator==(V3f v);
 
 		float dot(V3f v);
@@ -91,15 +91,15 @@ namespace Mat
 		V4f(float x, float y, float z, float w);
 		V4f(float v[4]);
 
-		void operator=(V4f v);
+		V4f& operator=(V4f v);
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
 		V4f operator*(float f);
 		V4f operator/(float f);
-		void operator+=(V4f v);
-		void operator-=(V4f v);
-		void operator*=(float f);
-		void operator/=(float f);
+		V4f& operator+=(V4f v);
+		V4f& operator-=(V4f v);
+		V4f& operator*=(float f);
+		V4f& operator/=(float f);
 		bool operator==(V4f v);
 
 		float dot(V4f v);
@@ -126,7 +126,7 @@ namespace Mat
 		M22f(float const (&m)[2][2]);
 		M22f(float const (&m)[4]);
 
-		void operator=(M22f mat);
+		M22f& operator=(M22f mat);
 		M22f operator+(M22f mat);
 		M22f operator-(M22f mat);
 		M22f operator*(float f);
@@ -158,7 +158,7 @@ namespace Mat
 		M33f(float const (&m)[3][3]);
 		M33f(float const (&m)[9]);
 
-		void operator=(M33f mat);
+		M33f& operator=(M33f mat);
 		M33f operator+(M33f mat);
 		M33f operator-(M33f mat);
 		M33f operator*(float f);
@@ -190,6 +190,7 @@ namespace Mat
 		M44f(float const (&m)[4][4]);
 		M44f(float const (&m)[16]);
 
+		M44f& operator=(M44f mat);
 		M44f operator+(M44f mat);
 		M44f operator-(M44f mat);
 		M44f operator*(float f);
@@ -218,6 +219,7 @@ namespace Mat
 		M23f(float const (&m)[2][3]);
 		M23f(float const (&m)[6]);
 
+		M23f& operator=(M23f mat);
 		M23f operator+(M23f mat);
 		M23f operator-(M23f mat);
 		M23f operator*(float f);
@@ -246,6 +248,7 @@ namespace Mat
 		M34f(float const (&m)[3][4]);
 		M34f(float const (&m)[12]);
 
+		M34f& operator=(M34f mat);
 		M34f operator+(M34f mat);
 		M34f operator-(M34f mat);
 		M34f operator*(float f);
