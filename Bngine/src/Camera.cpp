@@ -15,7 +15,7 @@ namespace Bngine {
 		projection.m[0][0] = aspect_ratio * 1/tanf(fov_rad);
 		projection.m[1][1] = 1 / tanf(fov_rad / 2);
 		projection.m[2][2] = clipping_far / q;
-		projection.m[3][2] = projection.m[2][2] * - clipping_near;
+		projection.m[3][2] = projection.m[2][2] * -clipping_near;
 		projection.m[2][3] = 1;
 	}
 
@@ -59,7 +59,7 @@ namespace Bngine {
 		_clipping_near = clipping_near;
 		float q = _clipping_far - _clipping_near;
 		projection.m[2][2] = _clipping_far / q;
-		projection.m[3][2] = projection.m[2][2] * - _clipping_near;
+		projection.m[3][2] = projection.m[2][2] * -_clipping_near;
 	}
 
 	void Camera::set_clipping_far(float clipping_far)
@@ -67,6 +67,6 @@ namespace Bngine {
 		_clipping_far = clipping_far;
 		float q = _clipping_far - _clipping_near;
 		projection.m[2][2] = _clipping_far / q;
-		projection.m[3][2] = projection.m[2][2] * - _clipping_near;
+		projection.m[3][2] = projection.m[2][2] * -_clipping_near;
 	}
 }
