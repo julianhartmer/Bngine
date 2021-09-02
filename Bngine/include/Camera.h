@@ -15,6 +15,7 @@ namespace Bngine {
 		float fov(void);
 		float clipping_near(void);
 		float clipping_far(void);
+		M44f projection(void);
 
 		void set_aspect_ratio(float aspect_ratio);
 		void set_fov(float fov);
@@ -26,7 +27,7 @@ namespace Bngine {
 		float _fov;
 		float _clipping_near;
 		float _clipping_far;
-		M44f projection;
+		M44f _projection;
 	};
 
 }
