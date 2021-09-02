@@ -17,8 +17,8 @@ int main()
 	if (!w) {
 		std::cout << SDL_GetError();
 	}
-	Camera cam = Camera(x/y, 60, 0.3, 1000);
-	Cube c = Cube(V3f(8.49, 0, 9.96), 1);
+	Camera cam = Camera(y/x, 90, 0.3, 1000);
+	Cube c = Cube(V3f(10000000000, 0, 200), 200);
 	std::vector<Tri2D> projected = c.project(cam);
 
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 0xFF);
