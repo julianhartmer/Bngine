@@ -638,9 +638,10 @@ namespace Mat {
 				o.v[y] += v.v[x] * m[y][x];
 			}
 		}
-		if (o.w > 1)
+		if (o.w != 0)
 		{
 			o /= o.w;
+			o.w = 1;
 		}
 		return o;
 	}
