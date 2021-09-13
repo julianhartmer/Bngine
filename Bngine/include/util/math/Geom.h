@@ -57,6 +57,7 @@ namespace Geom
 	public:
 		// TODO add rotation m33f
 		Cube(V3f pos, float l);
+		Cube(int x, int y, int z, float l);
 
 	private:
 		std::vector<Tri> calculateTris(V3f pos, float l);

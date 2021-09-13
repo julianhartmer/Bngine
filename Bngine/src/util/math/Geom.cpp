@@ -120,6 +120,11 @@ namespace Geom {
 	{
 	}
 
+	Cube::Cube(int x, int y, int z, float l)
+		: Mesh(calculateTris(V3f(x, y, z), l))
+	{
+	}
+
 	std::vector<Tri> Cube::calculateTris(V3f pos, float l)
 	{
 		std::vector<Tri> tris;
