@@ -78,9 +78,14 @@ namespace Geom {
 	{
 		Tri2D projected;
 		V4f tmp;
+		int x = c.camera_width();
+		int y = c.camera_height();
 		for (int i = 0; i < 3; ++i) {
 			tmp = c.projection() * _vecs[i];
-
+			tmp.x += 1;
+			tmp.x *= x / 2.0f;
+			tmp.y += 1;
+			tmp.y *= y / 2.0f;
 			projected.tris[i] = (V2f(tmp.x, tmp.y));
 		}
 		return projected;
@@ -116,28 +121,28 @@ namespace Geom {
 	}
 
 	Cube::Cube(V3f pos, float l)
-		: Mesh(calculateTris(pos, l))
+		: Mesh(calculateTris(pos.x, pos.y, pos.z, l))
 	{
 	}
 
-	Cube::Cube(int x, int y, int z, float l)
-		: Mesh(calculateTris(V3f(x, y, z), l))
+	Cube::Cube(float x, float y, float z, float l)
+		: Mesh(calculateTris(x, y, z, l))
 	{
 	}
 
-	std::vector<Tri> Cube::calculateTris(V3f pos, float l)
+	std::vector<Tri> Cube::calculateTris(float x, float y, float z, float l)
 	{
 		std::vector<Tri> tris;
 		V3f front[4];
 		V3f back[4];
-		front[0] = pos;
-		front[1] = V3f(pos.x + l, pos.y, pos.z);
-		front[2] = V3f(pos.x + l, pos.y + l, pos.z);
-		front[3] = V3f(pos.x, pos.y + l, pos.z);
-		back[0] = V3f(pos.x, pos.y, pos.z + l);
-		back[1] = V3f(pos.x + l, pos.y, pos.z + l);
-		back[2] = V3f(pos.x + l, pos.y + l, pos.z + l);
-		back[3] = V3f(pos.x, pos.y + l, pos.z + l);
+		front[0] = V3f(x, y, z);
+		front[1] = V3f(x + l, y, z);
+		front[2] = V3f(x + l, y + l, z);
+		front[3] = V3f(x, y + l, z);
+		back[0] = V3f(x, y, z + l);
+		back[1] = V3f(x + l, y, z + l);
+		back[2] = V3f(x + l, y + l, z + l);
+		back[3] = V3f(x, y + l, z + l);
 
 		// front
 		tris.push_back(Tri({ front[0], front[1], front[3] }));
@@ -162,6 +167,95 @@ namespace Geom {
 		// bottom
 		tris.push_back(Tri({ front[0], front[1], back[0] }));
 		tris.push_back(Tri({ front[1], back[1], back[0] }));
+
+		return tris;
+	}
+
+	Pyramid::Pyramid(float x, float y, float z, float l, float h)
+		: Mesh(calculateTris(x, y, z, l, h))
+	{
+	}
+
+	std::vector<Tri> Pyramid::calculateTris(float x, float y, float z, float l, float h)
+	{
+		std::vector<Tri> tris;
+		V3f baseandtip[5];
+		baseandtip[0] = V3f(x, y, z);
+		baseandtip[1] = V3f(x + l, y, z);
+		baseandtip[2] = V3f(x + l, y, z + l);
+		baseandtip[3] = V3f(x, y, z + l);
+		baseandtip[4] = V3f(x + (l / 2.0f), y + h, z + (l / 2.0f));
+
+		// bottom
+		tris.push_back(Tri({ baseandtip[0], baseandtip[1], baseandtip[3] }));
+		tris.push_back(Tri({ baseandtip[1], baseandtip[2], baseandtip[3] }));
+
+		// front
+		tris.push_back(Tri({ baseandtip[0], baseandtip[1], baseandtip[4] }));
+
+		// right
+		tris.push_back(Tri({ baseandtip[1], baseandtip[2], baseandtip[4] }));
+
+		// left
+		tris.push_back(Tri({ baseandtip[0], baseandtip[3], baseandtip[4] }));
+
+		// back
+		tris.push_back(Tri({ baseandtip[2], baseandtip[3], baseandtip[4] }));
+
+		return tris;
+	}
+
+	Icosahedron::Icosahedron(float x, float y, float z, float l)
+		: Mesh(calculateTris(x, y, z, l))
+	{
+	}
+
+	std::vector<Tri> Icosahedron::calculateTris(float x, float y, float z, float l)
+	{
+		float phi = 2.61803; //golden ratio
+		std::vector<Tri> tris;
+		V3f displacement = V3f(x, y, z);
+		V3f corners[12];
+		float len_mul = l / 2.0f;
+		// corners of a Icosahedron of edge length 2 taken from Wikipedia
+		corners[0] = V3f(0, 1, phi) * len_mul + displacement;
+		corners[1] = V3f(0, 1, -phi) * len_mul + displacement;
+		corners[2] = V3f(0, -1, phi) * len_mul + displacement;
+		corners[3] = V3f(0, -1, -phi) * len_mul + displacement;
+
+		corners[4] = V3f(1, phi, 0) * len_mul + displacement;
+		corners[5] = V3f(1, -phi, 0) * len_mul + displacement;
+		corners[6] = V3f(-1, phi, 0) * len_mul + displacement;
+		corners[7] = V3f(-1, -phi, 0) * len_mul + displacement;
+
+		corners[8] = V3f(phi, 0, 1) * len_mul + displacement;
+		corners[9] = V3f(phi, 0, -1) * len_mul + displacement;
+		corners[10] = V3f(-phi, 0, 1) * len_mul + displacement;
+		corners[11] = V3f(-phi, 0, -1) * len_mul + displacement;
+
+		tris.push_back(Tri({ corners[0], corners[2], corners[8] }));
+		tris.push_back(Tri({ corners[0], corners[2], corners[10] }));
+		tris.push_back(Tri({ corners[0], corners[4], corners[8] }));
+		tris.push_back(Tri({ corners[0], corners[4], corners[6] }));
+		tris.push_back(Tri({ corners[0], corners[10], corners[6] }));
+
+		tris.push_back(Tri({ corners[2], corners[7], corners[5] }));
+		tris.push_back(Tri({ corners[2], corners[7], corners[10] }));
+		tris.push_back(Tri({ corners[2], corners[5], corners[8] }));
+		tris.push_back(Tri({ corners[8], corners[5], corners[9] }));
+		tris.push_back(Tri({ corners[8], corners[4], corners[9] }));
+		
+		tris.push_back(Tri({ corners[10], corners[11], corners[7] }));
+		tris.push_back(Tri({ corners[3], corners[11], corners[1] }));
+		tris.push_back(Tri({ corners[3], corners[11], corners[7] }));
+		tris.push_back(Tri({ corners[3], corners[5], corners[7] }));
+		tris.push_back(Tri({ corners[3], corners[9], corners[1] }));
+
+		tris.push_back(Tri({ corners[3], corners[5], corners[9] }));
+		tris.push_back(Tri({ corners[1], corners[6], corners[11] }));
+		tris.push_back(Tri({ corners[1], corners[4], corners[6] }));
+		tris.push_back(Tri({ corners[1], corners[9], corners[4] }));
+		tris.push_back(Tri({ corners[6], corners[10], corners[11] }));
 
 		return tris;
 	}

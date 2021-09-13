@@ -17,18 +17,33 @@ int main()
 	if (!w) {
 		std::cout << SDL_GetError();
 	}
-	Camera cam = Camera(y/x, 90, 0.3, 1000);
-	Cube c = Cube(V3f(10000000000, 0, 200), 200);
-	std::vector<Tri2D> projected = c.project(cam);
+	Camera cam = Camera(x, y, 120, 1, 300);
+	Cube c = Cube(9, 3, 8, 2);
+	Pyramid p = Pyramid(-9, 3, 20, 2, 3);
+	Icosahedron i = Icosahedron(2, 1, 10,1);
+	
 
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 0xFF);
 	SDL_RenderClear(r);
 	SDL_SetRenderDrawColor(r, 0xFF, 0xFF, 0xFF, 0xFF);
 
+	std::vector<Tri2D> projected = c.project(cam);
 	for (Tri2D t : projected) {
-		SDL_RenderDrawLine(r, (t.tris[0].x + 1) * x / 2, (t.tris[0].y + 1) * y / 2, (t.tris[1].x * x + 1)* x / 2, (t.tris[1].y + 1)* y / 2);
-		SDL_RenderDrawLine(r, (t.tris[0].x + 1) * x / 2, (t.tris[0].y + 1) * y / 2, (t.tris[2].x * x + 1)* x / 2, (t.tris[2].y + 1)* y / 2);
-		SDL_RenderDrawLine(r, (t.tris[1].x + 1) * x / 2, (t.tris[1].y + 1) * y / 2, (t.tris[2].x * x + 1)* x / 2, (t.tris[2].y + 1)* y / 2);
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[1].x, t.tris[1].y);
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[2].x, t.tris[2].y);
+		SDL_RenderDrawLine(r, t.tris[1].x, t.tris[1].y, t.tris[2].x, t.tris[2].y);
+	}
+	projected = p.project(cam);
+	for (Tri2D t : projected) {
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[1].x, t.tris[1].y);
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[2].x, t.tris[2].y);
+		SDL_RenderDrawLine(r, t.tris[1].x, t.tris[1].y, t.tris[2].x, t.tris[2].y);
+	}
+	projected = i.project(cam);
+	for (Tri2D t : projected) {
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[1].x, t.tris[1].y);
+		SDL_RenderDrawLine(r, t.tris[0].x, t.tris[0].y, t.tris[2].x, t.tris[2].y);
+		SDL_RenderDrawLine(r, t.tris[1].x, t.tris[1].y, t.tris[2].x, t.tris[2].y);
 	}
 
 	SDL_RenderPresent(r);

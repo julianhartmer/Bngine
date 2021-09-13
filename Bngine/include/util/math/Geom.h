@@ -57,10 +57,30 @@ namespace Geom
 	public:
 		// TODO add rotation m33f
 		Cube(V3f pos, float l);
-		Cube(int x, int y, int z, float l);
+		Cube(float x, float y, float z, float l);
 
 	private:
-		std::vector<Tri> calculateTris(V3f pos, float l);
+		std::vector<Tri> calculateTris(float x, float y, float z, float l);
+
+	};
+
+	class Pyramid : public Mesh {
+	public:
+		// TODO add rotation m33f
+		Pyramid(float x, float y, float z, float l, float h);
+
+	private:
+		std::vector<Tri> calculateTris(float x, float y, float z, float l, float h);
+
+	};
+
+	class Icosahedron : public Mesh {
+	public:
+		// TODO add rotation m33f
+		Icosahedron(float x, float y, float z, float l);
+
+	private:
+		std::vector<Tri> calculateTris(float x, float y, float z, float l);
 
 	};
 

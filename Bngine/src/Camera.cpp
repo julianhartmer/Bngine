@@ -3,20 +3,32 @@
 #include "..\include\Camera.h"
 
 namespace Bngine {
-	Camera::Camera(float aspect_ratio, float fov, float clipping_near, float clipping_far)
+	Camera::Camera(int width, int height, float fov, float clipping_near, float clipping_far)
 	{
 		float fov_rad = 1 / tanf(fov * 0.5f / 180.0f * M_PI);
 		float q = clipping_far - clipping_near;
-		_aspect_ratio = aspect_ratio;
+		_camera_width = width;
+		_camera_height = height;
+		_aspect_ratio = float(height) / float(width);
 		_fov = fov;
 		_clipping_near = clipping_near;
 		_clipping_far = clipping_far;
 		_projection = M44f({ 0 });
-		_projection.m[0][0] = aspect_ratio * fov_rad;
+		_projection.m[0][0] = _aspect_ratio * fov_rad;
 		_projection.m[1][1] = fov_rad;
-		_projection.m[2][2] = clipping_far / q;
+		_projection.m[2][2] = clipping_far / (clipping_far - clipping_near);
 		_projection.m[3][2] = _projection.m[2][2] * -clipping_near;
 		_projection.m[2][3] = 1;
+	}
+
+	int Camera::camera_height(void)
+	{
+		return _camera_height;
+	}
+
+	int Camera::camera_width(void)
+	{
+		return _camera_width;
 	}
 
 	float Camera::aspect_ratio(void)
@@ -44,11 +56,20 @@ namespace Bngine {
 		return _projection;
 	}
 
-	void Camera::set_aspect_ratio(float aspect_ratio)
+	void Camera::set_camera_width(int width)
 	{
-		_aspect_ratio = aspect_ratio;
+		_camera_width = width;
+		_aspect_ratio = float(_camera_height) / float(_camera_width);
 		float fov_rad = _fov / 360 * 2 * M_PI;
-		_projection.m[0][0] = aspect_ratio * 1 / tanf(fov_rad);
+		_projection.m[0][0] = _aspect_ratio * 1 / tanf(fov_rad);
+	}
+
+	void Camera::set_camera_height(int height)
+	{
+		_camera_height = height;
+		_aspect_ratio = float(_camera_height) / float(_camera_width);
+		float fov_rad = _fov / 360 * 2 * M_PI;
+		_projection.m[0][0] = _aspect_ratio * 1 / tanf(fov_rad);
 	}
 
 	void Camera::set_fov(float fov)
@@ -62,16 +83,14 @@ namespace Bngine {
 	void Camera::set_clipping_near(float clipping_near)
 	{
 		_clipping_near = clipping_near;
-		float q = _clipping_far - _clipping_near;
-		_projection.m[2][2] = _clipping_far / q;
+		_projection.m[2][2] = _clipping_far / (_clipping_far - _clipping_near);
 		_projection.m[3][2] = _projection.m[2][2] * -_clipping_near;
 	}
 
 	void Camera::set_clipping_far(float clipping_far)
 	{
 		_clipping_far = clipping_far;
-		float q = _clipping_far - _clipping_near;
-		_projection.m[2][2] = _clipping_far / q;
+		_projection.m[2][2] = _clipping_far / (_clipping_far - _clipping_near);
 		_projection.m[3][2] = _projection.m[2][2] * -_clipping_near;
 	}
 }
