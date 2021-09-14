@@ -17,10 +17,12 @@ int main()
 	if (!w) {
 		std::cout << SDL_GetError();
 	}
-	Camera cam = Camera(x, y, 120, 1, 300);
+	Camera cam = Camera(x, y, V3f(0, 0, 0), 90, 1, 300);
+	cam.set_direction(V3f(1, 0, 0));
+	cam.set_rotation(V3f(0, -40, 0));
 	Cube c = Cube(9, 3, 8, 2);
 	Pyramid p = Pyramid(-9, 3, 20, 2, 3);
-	Icosahedron i = Icosahedron(2, 1, 10,1);
+	Icosahedron i = Icosahedron(2, 1, 10, 1);
 	
 
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 0xFF);

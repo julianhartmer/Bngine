@@ -81,7 +81,7 @@ namespace Geom {
 		int x = c.camera_width();
 		int y = c.camera_height();
 		for (int i = 0; i < 3; ++i) {
-			tmp = c.projection() * _vecs[i];
+			tmp = c.mProjection() * (c.mPosition() * _vecs[i]);
 			tmp.x += 1;
 			tmp.x *= x / 2.0f;
 			tmp.y += 1;

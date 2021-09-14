@@ -259,4 +259,8 @@ namespace Mat
 	};
 
 	std::ostream& operator<<(std::ostream& os, const M34f& m);
+
+	M22f id22(void);
+	M33f id33(void);
+	M44f id44(void);
 }
