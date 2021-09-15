@@ -1,5 +1,8 @@
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include "util/math/Geom.h"
+
+#define barycenter 1 // 1: center of vertices, 2: center of edges, 3: center of polygon
 
 namespace Geom {
 	Tri::Tri(const V3f(&vecs)[3]) {
@@ -50,8 +53,14 @@ namespace Geom {
 	*
 	*	\return surface normal
 	**/
-	V4f Tri::normal(void) {
+	V4f Tri::normal(void) 
+	{
 		return _normal;
+	}
+
+	float Tri::area(void)
+	{
+		return (_vecs[1] - _vecs[0]).cross((_vecs[2] - _vecs[0])).norm() / 2.0f; // half cross-product formula
 	}
 
 	V4f Tri::vecs(int i)
@@ -60,11 +69,6 @@ namespace Geom {
 			throw std::out_of_range("index of out range");
 		return _vecs[i];
 	}
-
-	//V2f Tri::project(M44f)
-	//{
-	//	// TODO
-	//}
 
 	V4f Tri::update_normal(void)
 	{
@@ -91,13 +95,22 @@ namespace Geom {
 		return projected;
 	}
 
+	void Tri::move(V4f center, M44f move_mat)
+	{
+		for (int it = 0; it < 3; ++it)
+		{
+			_vecs[it] = (move_mat * (_vecs[it] - center)) + center;
+		}
+	}
 
 	//////////
 	// Mesh //
 	//////////
+
 	Mesh::Mesh(std::vector<Tri> tris)
 	{
 		this->tris = tris;
+		_calc_center();
 	}
 
 	Mesh::Mesh() {
@@ -108,6 +121,11 @@ namespace Geom {
 		tris.push_back(t);
 	}
 
+	V4f Mesh::center()
+	{
+		return _center;
+	}
+
 	std::vector<Tri2D> Mesh::project(Camera c)
 	{
 		std::vector<Tri2D> o;
@@ -116,9 +134,88 @@ namespace Geom {
 			o.push_back(it->project(c));
 		}
 
-
 		return o;
 	}
+
+	void Mesh::_calc_center(void)
+	{
+		V4f avg = V4f(0, 0, 0, 0);
+		if (barycenter == 1)
+		{
+			// center of vertices: simple average of vertex coordinates
+			for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
+				for (int it2 = 0; it2 < 3; ++it2)
+				{
+					avg += it1->vecs(it2); // averaging handled internally by V4f class (w component)
+				}
+			}
+			
+		}
+		else if (barycenter == 2)
+		{
+			// center of edges: average of edge midpoints weighted by edge length
+			for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
+				// averaging handled again by V4f class (w component)
+				avg += ((it1->vecs(0) - it1->vecs(1)) / 2 + it1->vecs(1)) * (it1->vecs(0) - it1->vecs(1)).norm();
+				avg += ((it1->vecs(1) - it1->vecs(2)) / 2 + it1->vecs(2)) * (it1->vecs(1) - it1->vecs(2)).norm();
+				avg += ((it1->vecs(2) - it1->vecs(0)) / 2 + it1->vecs(0)) * (it1->vecs(2) - it1->vecs(0)).norm();
+			}
+		}
+		else if (barycenter == 3)
+		{
+			// center of polygon: average of the vertex coordinates weighted by polygon (tri) area
+			for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
+				V4f avg_tmp = V4f(0, 0, 0, 0);
+				for (int it2 = 0; it2 < 3; ++it2)
+				{
+					avg_tmp += it1->vecs(it2); // averaging handled internally by V4f class (w component)
+				}
+				avg += avg_tmp * it1->area();
+			}
+		}
+		avg.w = 0; // we want to use the center as a displacement later on, even though it's an actual location
+		_center = avg;
+	}
+
+	void Mesh::move(M44f move_mat)
+	{
+		// uses the center vector to virtually displace the mesh such that its center is in the origin, then apply the 4x4 mat, then add the center displacement again
+		for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
+			it1->move(_center, move_mat);
+		}
+		_center.x += move_mat.m[0][3];
+		_center.y += move_mat.m[1][3];
+		_center.z += move_mat.m[2][3];		
+	}
+
+	void Mesh::translate(V3f translation)
+	{
+		M44f move_mat = id44();
+		move_mat.m[0][3] = translation.x;
+		move_mat.m[1][3] = translation.y;
+		move_mat.m[2][3] = translation.z;
+		move(move_mat);
+	}
+
+	void Mesh::rotate(V3f rotation)
+	{
+		V3f rotation_rad = rotation * (M_PI / 180.0f);
+		M44f move_mat = id44();
+		move_mat.m[0][1] = cos(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) - sin(rotation_rad.z) * cos(rotation_rad.x);
+		move_mat.m[0][2] = cos(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) + sin(rotation_rad.z) * cos(rotation_rad.x);
+		move_mat.m[1][1] = sin(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) + cos(rotation_rad.z) * cos(rotation_rad.x);
+		move_mat.m[1][2] = sin(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) - cos(rotation_rad.z) * sin(rotation_rad.x);
+		move_mat.m[2][0] = -sin(rotation_rad.y);
+		move_mat.m[0][0] = cos(rotation_rad.z) * cos(rotation_rad.y);
+		move_mat.m[1][0] = sin(rotation_rad.z) * cos(rotation_rad.y);
+		move_mat.m[2][1] = cos(rotation_rad.y) * sin(rotation_rad.x);
+		move_mat.m[2][2] = cos(rotation_rad.y) * cos(rotation_rad.x);
+		move(move_mat);
+	}
+
+	//////////
+	// Cube //
+	//////////
 
 	Cube::Cube(V3f pos, float l)
 		: Mesh(calculateTris(pos.x, pos.y, pos.z, l))
@@ -171,6 +268,10 @@ namespace Geom {
 		return tris;
 	}
 
+	/////////////
+	// Pyramid //
+	/////////////
+
 	Pyramid::Pyramid(float x, float y, float z, float l, float h)
 		: Mesh(calculateTris(x, y, z, l, h))
 	{
@@ -204,6 +305,10 @@ namespace Geom {
 
 		return tris;
 	}
+
+	/////////////////
+	// Icosahedron //
+	/////////////////
 
 	Icosahedron::Icosahedron(float x, float y, float z, float l)
 		: Mesh(calculateTris(x, y, z, l))

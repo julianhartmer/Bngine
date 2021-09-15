@@ -17,7 +17,7 @@ int main()
 	if (!w) {
 		std::cout << SDL_GetError();
 	}
-	Camera cam = Camera(x, y, V3f(0, 0, 0), 90, 1, 300);
+	Camera cam = Camera(x, y, V3f(0, 0, 0), 120, 1, 3000);
 	Cube c = Cube(9, 3, 8, 2);
 	Pyramid p = Pyramid(-9, 3, 20, 2, 3);
 	Icosahedron i = Icosahedron(2, 1, 10, 1);
@@ -28,7 +28,9 @@ int main()
 	
 	SDL_SetRenderDrawColor(r, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	for (float j = 0;j < 4000;j += 0.2)
+	M44f move_mat = id44();
+
+	for (float j = 0;j < 4000;j += 0.002)
 	{
 		SDL_SetRenderDrawColor(r, 0, 0, 0, 0xFF);
 		SDL_RenderClear(r);
@@ -53,7 +55,11 @@ int main()
 		}
 		
 		SDL_RenderPresent(r);
-		cam.set_rotation(V3f(0, j * 2, j));
+		//cam.set_rotation(V3f(0, j * 2, j));
+		c.rotate(V3f(0, 0, 0.05));
+		i.rotate(V3f(0, 0, 0.15));
+		//c.translate(V3f(0, 0, j));
+		//i.translate(V3f(0, 0, -j / 10));
 		SDL_Delay(10);
 		
 	}

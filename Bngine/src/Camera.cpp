@@ -72,8 +72,7 @@ namespace Bngine {
 
 	V4f Camera::vPosition(void)
 	{
-		V4f o = V4f(_mPosition.m[0][3], _mPosition.m[1][3], _mPosition.m[2][3], 1);
-		return o;
+		return V4f(_mPosition.m[0][3], _mPosition.m[1][3], _mPosition.m[2][3], 1);
 	}
 
 	V3f Camera::vRotation(void)

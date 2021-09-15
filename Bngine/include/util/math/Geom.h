@@ -24,6 +24,8 @@ namespace Geom
 
 		V4f normal(void);
 		V4f vecs(int i);
+		float area(void);
+		void move(V4f displacement, M44f move_mat);
 		// ?
 		//V2f project(M44f);
 		Tri2D project(Camera c);
@@ -47,10 +49,19 @@ namespace Geom
 		void operator/(Mesh t);
 		void operator/=(Mesh t);*/
 
+		V4f center();
+		void move(M44f move_mat);
+		void translate(V3f translation);
+		void rotate(V3f rotation);
+
 		Mesh(std::vector<Tri> tris);
 		Mesh();
 		
 	private:
+	
+	protected:
+		V4f _center;
+		void _calc_center(void);
 	};
 
 	class Cube : public Mesh {
