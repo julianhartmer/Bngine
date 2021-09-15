@@ -60,6 +60,13 @@ namespace Mat {
 		return (x == v.x && y == v.y);
 	}
 
+	V2f::operator bool() const
+	{
+		if (x == 0 && y == 0)
+			return false;
+		return true;
+	}
+
 	float V2f::dot(V2f v) {
 		return x * v.x + y * v.y;
 	}
@@ -151,6 +158,13 @@ namespace Mat {
 
 	bool V3f::operator==(V3f v) {
 		return (x == v.x && y == v.y && z == v.z);
+	}
+
+	V3f::operator bool() const
+	{
+		if (x == 0 && y == 0 && z == 0)
+			return false;
+		return true;
 	}
 
 	float V3f::dot(V3f v) {
@@ -265,6 +279,13 @@ namespace Mat {
 
 	bool V4f::operator==(V4f v) {
 		return (x == v.x && y == v.y && z == v.z && w == v.w);
+	}
+
+	V4f::operator bool() const
+	{
+		if (x == 0 && y == 0 && z == 0 && w == 0)
+			return false;
+		return true;
 	}
 
 	float V4f::dot(V4f v) {

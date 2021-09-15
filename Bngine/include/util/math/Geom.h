@@ -50,9 +50,7 @@ namespace Geom
 		void operator/=(Mesh t);*/
 
 		V4f center();
-		void move(M44f move_mat);
-		void translate(V3f translation);
-		void rotate(V3f rotation);
+		void move(V3f translation, V3f rotation);
 
 		Mesh(std::vector<Tri> tris);
 		Mesh();
@@ -62,6 +60,7 @@ namespace Geom
 	protected:
 		V4f _center;
 		void _calc_center(void);
+		void _move(M44f move_mat);
 	};
 
 	class Cube : public Mesh {

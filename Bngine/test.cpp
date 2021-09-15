@@ -56,8 +56,8 @@ int main()
 		
 		SDL_RenderPresent(r);
 		//cam.set_rotation(V3f(0, j * 2, j));
-		c.rotate(V3f(0, 0, 0.05));
-		i.rotate(V3f(0, 0, 0.15));
+		c.move(V3f(0, 0, -j), V3f(0, 0, 0.05));
+		i.move(V3f(0, 0, 0), V3f(0, 0, 0.15));
 		//c.translate(V3f(0, 0, j));
 		//i.translate(V3f(0, 0, -j / 10));
 		SDL_Delay(10);

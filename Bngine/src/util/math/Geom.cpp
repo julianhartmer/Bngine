@@ -177,7 +177,7 @@ namespace Geom {
 		_center = avg;
 	}
 
-	void Mesh::move(M44f move_mat)
+	void Mesh::_move(M44f move_mat)
 	{
 		// uses the center vector to virtually displace the mesh such that its center is in the origin, then apply the 4x4 mat, then add the center displacement again
 		for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
@@ -188,29 +188,29 @@ namespace Geom {
 		_center.z += move_mat.m[2][3];		
 	}
 
-	void Mesh::translate(V3f translation)
+	void Mesh::move(V3f translation, V3f rotation)
 	{
 		M44f move_mat = id44();
-		move_mat.m[0][3] = translation.x;
-		move_mat.m[1][3] = translation.y;
-		move_mat.m[2][3] = translation.z;
-		move(move_mat);
-	}
-
-	void Mesh::rotate(V3f rotation)
-	{
-		V3f rotation_rad = rotation * (M_PI / 180.0f);
-		M44f move_mat = id44();
-		move_mat.m[0][1] = cos(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) - sin(rotation_rad.z) * cos(rotation_rad.x);
-		move_mat.m[0][2] = cos(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) + sin(rotation_rad.z) * cos(rotation_rad.x);
-		move_mat.m[1][1] = sin(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) + cos(rotation_rad.z) * cos(rotation_rad.x);
-		move_mat.m[1][2] = sin(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) - cos(rotation_rad.z) * sin(rotation_rad.x);
-		move_mat.m[2][0] = -sin(rotation_rad.y);
-		move_mat.m[0][0] = cos(rotation_rad.z) * cos(rotation_rad.y);
-		move_mat.m[1][0] = sin(rotation_rad.z) * cos(rotation_rad.y);
-		move_mat.m[2][1] = cos(rotation_rad.y) * sin(rotation_rad.x);
-		move_mat.m[2][2] = cos(rotation_rad.y) * cos(rotation_rad.x);
-		move(move_mat);
+		if (translation)
+		{
+			move_mat.m[0][3] = translation.x;
+			move_mat.m[1][3] = translation.y;
+			move_mat.m[2][3] = translation.z;
+		}
+		if (rotation)
+		{
+			V3f rotation_rad = rotation * (M_PI / 180.0f);
+			move_mat.m[0][1] = cos(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) - sin(rotation_rad.z) * cos(rotation_rad.x);
+			move_mat.m[0][2] = cos(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) + sin(rotation_rad.z) * cos(rotation_rad.x);
+			move_mat.m[1][1] = sin(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) + cos(rotation_rad.z) * cos(rotation_rad.x);
+			move_mat.m[1][2] = sin(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) - cos(rotation_rad.z) * sin(rotation_rad.x);
+			move_mat.m[2][0] = -sin(rotation_rad.y);
+			move_mat.m[0][0] = cos(rotation_rad.z) * cos(rotation_rad.y);
+			move_mat.m[1][0] = sin(rotation_rad.z) * cos(rotation_rad.y);
+			move_mat.m[2][1] = cos(rotation_rad.y) * sin(rotation_rad.x);
+			move_mat.m[2][2] = cos(rotation_rad.y) * cos(rotation_rad.x);
+		}
+		_move(move_mat);
 	}
 
 	//////////
