@@ -133,36 +133,50 @@ namespace Geom {
 
 	void Geom::_calc_center(void)
 	{
-		V4f avg = V4f(0, 0, 0, 0);
+		V4f avg = V4f(0, 0, 0, 0); // we want to use the center as a displacement later on, even though it's an actual location, so w=0
+		int normalize = _tris.size()*3;
 #if BARYCENTER == BARYCENTER_CENTER_OF_VERTICES
 		// center of vertices: simple average of vertex coordinates
 		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
 			for (int it2 = 0; it2 < 3; ++it2)
 			{
-				avg += it1->vecs(it2); // averaging handled internally by V4f class (w component)
+				avg.x += it1->vecs(it2).x;
+				avg.y += it1->vecs(it2).y;
+				avg.z += it1->vecs(it2).z;
 			}
 		}
 #elif BARYCENTER == BARYCENTER_CENTER_OF_EDGES
 		// center of edges: average of edge midpoints weighted by edge length
-		for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
-			// averaging handled again by V4f class (w component)
-			avg += ((it1->vecs(0) - it1->vecs(1)) / 2 + it1->vecs(1)) * (it1->vecs(0) - it1->vecs(1)).norm();
-			avg += ((it1->vecs(1) - it1->vecs(2)) / 2 + it1->vecs(2)) * (it1->vecs(1) - it1->vecs(2)).norm();
-			avg += ((it1->vecs(2) - it1->vecs(0)) / 2 + it1->vecs(0)) * (it1->vecs(2) - it1->vecs(0)).norm();
+		V4f tmp1, tmp2, tmp3;
+		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
+			tmp1 = ((it1->vecs(0) - it1->vecs(1)) / 2 + it1->vecs(1)) * (it1->vecs(0) - it1->vecs(1)).norm();
+			tmp2 = ((it1->vecs(1) - it1->vecs(2)) / 2 + it1->vecs(2)) * (it1->vecs(1) - it1->vecs(2)).norm();
+			tmp3 = ((it1->vecs(2) - it1->vecs(0)) / 2 + it1->vecs(0)) * (it1->vecs(2) - it1->vecs(0)).norm();
+
+			avg.x += tmp1.x;
+			avg.y += tmp1.y;
+			avg.z += tmp1.z;
+			avg.x += tmp2.x;
+			avg.y += tmp2.y;
+			avg.z += tmp2.z;
+			avg.x += tmp3.x;
+			avg.y += tmp3.y;
+			avg.z += tmp3.z;
 		}
 #elif BARYCENTER == BARYCENTER_CENTER_OF_POLYGON
 		// center of polygon: average of the vertex coordinates weighted by polygon (tri) area
-		for (auto it1 = tris.begin(); it1 != tris.end(); ++it1) {
+		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
 			V4f avg_tmp = V4f(0, 0, 0, 0);
 			for (int it2 = 0; it2 < 3; ++it2)
 			{
-				avg_tmp += it1->vecs(it2); // averaging handled internally by V4f class (w component)
+				avg_tmp.x += it1->vecs(it2).x;
+				avg_tmp.y += it1->vecs(it2).y;
+				avg_tmp.z += it1->vecs(it2).z;
 			}
 			avg += avg_tmp * it1->area();
 		}
-#endif // BARYCENTER
-		avg.w = 0; // we want to use the center as a displacement later on, even though it's an actual location
-		_center = avg;
+#endif // BARYCENTER 
+		_center = avg / float(normalize);
 	}
 
 	void Geom::_move(M44f move_mat)
