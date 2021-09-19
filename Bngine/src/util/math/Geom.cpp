@@ -7,7 +7,7 @@
 #define BARYCENTER_CENTER_OF_POLYGON 2
 #define BARYCENTER BARYCENTER_CENTER_OF_VERTICES // 1: center of vertices, 2: center of edges, 3: center of polygon
 
-namespace Geom {
+namespace Bngine {
 	Tri::Tri(const V3f(&vecs)[3]) {
 		for (int i = 0; i < 3; ++i)
 			_vecs[i] = V4f(vecs[i].x, vecs[i].y, vecs[i].z, 1);
@@ -85,8 +85,8 @@ namespace Geom {
 	{
 		Tri2D projected;
 		V4f tmp;
-		int x = c.camera_width();
-		int y = c.camera_height();
+		int x = c.projection_width();
+		int y = c.projection_height();
 		for (int i = 0; i < 3; ++i) {
 			tmp = c.mProjection() * (c.mPosition() * _vecs[i]);
 			tmp.x += 1;
