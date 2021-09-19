@@ -4,9 +4,8 @@
 #include <vector>
 
 using namespace Mat;
-using namespace Bngine;
 
-namespace Geom
+namespace Bngine
 {
 	struct Tri2D {
 		V2f vertices[3];

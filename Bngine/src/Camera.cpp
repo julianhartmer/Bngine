@@ -30,12 +30,12 @@ namespace Bngine {
 		set_rotation(_vRotation);
 	}
 
-	int Camera::camera_height(void)
+	int Camera::projection_height(void)
 	{
 		return _camera_height;
 	}
 
-	int Camera::camera_width(void)
+	int Camera::projection_width(void)
 	{
 		return _camera_width;
 	}
