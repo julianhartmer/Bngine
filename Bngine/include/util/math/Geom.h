@@ -9,7 +9,7 @@ using namespace Bngine;
 namespace Geom
 {
 	struct Tri2D {
-		V2f tris[3];
+		V2f vertices[3];
 	};
 
 	class Tri {
@@ -37,61 +37,57 @@ namespace Geom
 		V4f update_normal(void);
 	};
 
-	// TODO after triangle rendered
-	class Mesh {
+	class Geom {
 	public:
-		std::vector<Tri> tris;
-		void operator=(Mesh t);
-		void operator<<(Tri t);
+		std::vector<Tri> tris();
 		std::vector<Tri2D> project(Camera c);
-		/*void operator*(float f);
-		void operator*=(Mesh t);
-		void operator/(Mesh t);
-		void operator/=(Mesh t);*/
-
 		V4f center();
 		void move(V3f translation, V3f rotation);
 
-		Mesh(std::vector<Tri> tris);
-		Mesh();
-		
-	private:
-	
 	protected:
+		std::vector<Tri> _tris;
 		V4f _center;
 		void _calc_center(void);
 		void _move(M44f move_mat);
 	};
 
-	class Cube : public Mesh {
+	// TODO after triangle rendered
+	class Mesh : public Geom {
+	public:
+		void operator<<(Tri t);
+
+		Mesh(std::vector<Tri> _tris);
+		Mesh();
+	};
+
+	class Cube : public Geom {
 	public:
 		// TODO add rotation m33f
 		Cube(V3f pos, float l);
 		Cube(float x, float y, float z, float l);
 
 	private:
-		std::vector<Tri> calculateTris(float x, float y, float z, float l);
+		std::vector<Tri> _calc_tris(float x, float y, float z, float l);
 
 	};
 
-	class Pyramid : public Mesh {
+	class Pyramid : public Geom {
 	public:
 		// TODO add rotation m33f
 		Pyramid(float x, float y, float z, float l, float h);
 
 	private:
-		std::vector<Tri> calculateTris(float x, float y, float z, float l, float h);
+		std::vector<Tri> _calc_tris(float x, float y, float z, float l, float h);
 
 	};
 
-	class Icosahedron : public Mesh {
+	class Icosahedron : public Geom {
 	public:
 		// TODO add rotation m33f
 		Icosahedron(float x, float y, float z, float l);
 
 	private:
-		std::vector<Tri> calculateTris(float x, float y, float z, float l);
-
+		std::vector<Tri> _calc_tris(float x, float y, float z, float l);
 	};
 
 }
