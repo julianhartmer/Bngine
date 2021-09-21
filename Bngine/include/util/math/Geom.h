@@ -53,10 +53,11 @@ namespace Bngine
 	// TODO after triangle rendered
 	class Mesh : public Geom {
 	public:
-		void operator<<(Tri t);
-
 		Mesh(std::vector<Tri> _tris);
+		Mesh(std::string file_path);
 		Mesh();
+
+		void operator<<(Tri t);
 	};
 
 	class Cube : public Geom {

@@ -20,9 +20,12 @@ namespace Bngine {
 
 	void Renderer::render()
 	{
-		SDL_SetRenderDrawColor(_r, 0, 0, 0, 0xFF);
-		SDL_RenderClear(_r);
-		SDL_SetRenderDrawColor(_r, 0xFF, 0xFF, 0xFF, 0xFF);
+		if (SDL_SetRenderDrawColor(_r, 0, 0, 0, 0xFF))
+			std::cout << SDL_GetError();
+		if (SDL_RenderClear(_r))
+			std::cout << SDL_GetError();
+		if (SDL_SetRenderDrawColor(_r, 0xFF, 0xFF, 0xFF, 0xFF))
+			std::cout << SDL_GetError();
 		for (Geom &g : _geoms)
 		{
 			for (Tri2D t : g.project(_c)) {

@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "util/math/Geom.h"
+#include "SDL.h"
 
 #define BARYCENTER_CENTER_OF_VERTICES 0
 #define BARYCENTER_CENTER_OF_EDGES 1
@@ -227,6 +228,48 @@ namespace Bngine {
 
 	Mesh::Mesh() {
 		_tris.clear();
+	}
+
+	Mesh::Mesh(std::string file_path)
+	{
+		SDL_RWops* file;
+		uint32_t tris_num;
+		float norm[3];
+		V3f v[3];
+
+		_tris.clear();
+		file = SDL_RWFromFile(file_path.c_str(), "r");
+		if (NULL == file)
+			goto error;
+
+		// first 80 bytes are header
+		if (-1 == SDL_RWseek(file, 80, RW_SEEK_SET))
+			goto error;
+
+		// read number of triangles
+		if (sizeof (tris_num) != SDL_RWread(file, &tris_num, 1, sizeof(tris_num)))
+			goto error;
+
+		for (uint32_t i = 0; i < tris_num; ++i)
+		{
+			// skip norm vector
+			if (sizeof(norm) != SDL_RWread(file, &norm, 1, sizeof(norm)))
+				goto error;
+			// tri 1
+			if (9 * sizeof (float) != SDL_RWread(file, v, 1, 9 * sizeof(float)))
+				goto error;
+			// skip attribute 16 byte
+			if (-1 == SDL_RWseek(file, 2, RW_SEEK_CUR))
+				goto error;
+			_tris.push_back(Tri(v));
+
+		}
+
+		SDL_RWclose(file);
+		return;
+	error:
+		std::cout << SDL_GetError();
+		return;
 	}
 
 	void Mesh::operator<<(Tri t) {
