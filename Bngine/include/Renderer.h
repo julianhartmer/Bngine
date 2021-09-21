@@ -21,7 +21,8 @@ namespace Bngine {
 		SDL_Renderer *_r;
 		SDL_Window *_w;
 		Camera &_c;
-		std::vector<std::reference_wrapper<Geom>> _geoms;
+		//std::vector<std::reference_wrapper<Geom>> _geoms;
+		std::vector<Geom> _geoms;
 	};
 
 }
