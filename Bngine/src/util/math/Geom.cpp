@@ -230,12 +230,13 @@ namespace Bngine {
 		_tris.clear();
 	}
 
-	Mesh::Mesh(std::string file_path)
+	Mesh::Mesh(std::string file_path, float x, float y, float z)
 	{
 		SDL_RWops* file;
 		uint32_t tris_num;
 		float norm[3];
 		V3f v[3];
+		V3f displacement(x, y, z);
 
 		_tris.clear();
 		file = SDL_RWFromFile(file_path.c_str(), "r");
@@ -261,11 +262,15 @@ namespace Bngine {
 			// skip attribute 16 byte
 			if (-1 == SDL_RWseek(file, 2, RW_SEEK_CUR))
 				goto error;
+			v[0] += displacement;
+			v[1] += displacement;
+			v[2] += displacement;
 			_tris.push_back(Tri(v));
 
 		}
 
 		SDL_RWclose(file);
+		_calc_center();
 		return;
 	error:
 		std::cout << SDL_GetError();

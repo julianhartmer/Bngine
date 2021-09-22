@@ -16,7 +16,7 @@ int main()
 	SDL_Init(SDL_INIT_EVERYTHING);
 	int x = 1500, y = 1000;
 	Camera cam = Camera(x, y, V3f(0, 0, 0), 120, 1, 3000);
-	Mesh m = Mesh("data/monkey.stl");
+	Mesh m = Mesh("data/monkey.stl", 10, 10, 10);
 	Cube c = Cube(9, 3, 8, 2);
 	Pyramid p = Pyramid(-9, 3, 20, 2, 3);
 	Icosahedron i = Icosahedron(2, 1, 10, 1);

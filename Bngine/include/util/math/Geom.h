@@ -54,7 +54,7 @@ namespace Bngine
 	class Mesh : public Geom {
 	public:
 		Mesh(std::vector<Tri> _tris);
-		Mesh(std::string file_path);
+		Mesh(std::string file_path, float x, float y, float z);
 		Mesh();
 
 		void operator<<(Tri t);
