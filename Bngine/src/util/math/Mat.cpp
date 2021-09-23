@@ -210,7 +210,7 @@ namespace Mat {
 
 	V4f V3f::add_w(float w)
 	{
-		return V4f(x, z, y, w);
+		return V4f(x, y, z, w);
 	}
 
 	std::ostream &operator<<(std::ostream &os, const V3f &v) {
