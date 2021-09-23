@@ -32,6 +32,11 @@ namespace Mat {
 		return V2f(x - v.x, y - v.y);
 	}
 
+	V2f V2f::operator-(void)
+	{
+		return V2f(-x, -y);
+	}
+
 	V2f V2f::operator*(float f) {
 		return V2f(f * x, f * y);
 	}
@@ -58,6 +63,11 @@ namespace Mat {
 
 	bool V2f::operator==(V2f v) {
 		return (x == v.x && y == v.y);
+	}
+
+	bool V2f::operator!=(V2f v)
+	{
+		return (x != v.x || y != v.y);
 	}
 
 	V2f::operator bool() const
@@ -132,6 +142,11 @@ namespace Mat {
 		return V3f(x - v.x, y - v.y, z - v.z);
 	}
 
+	V3f V3f::operator-(void)
+	{
+		return V3f(-x,-y,-z);
+	}
+
 	V3f V3f::operator*(float f) {
 		return V3f(x * f, y * f, z * f);
 	}
@@ -158,6 +173,11 @@ namespace Mat {
 
 	bool V3f::operator==(V3f v) {
 		return (x == v.x && y == v.y && z == v.z);
+	}
+
+	bool V3f::operator!=(V3f v)
+	{
+		return (x != v.x || y != v.y || z != v.z);
 	}
 
 	V3f::operator bool() const
@@ -196,6 +216,11 @@ namespace Mat {
 			o = V3f(0, 0, 0); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
+	}
+
+	V4f V3f::add_w(float w)
+	{
+		return V4f(x, y, z, w);
 	}
 
 	std::ostream &operator<<(std::ostream &os, const V3f &v) {
@@ -251,6 +276,11 @@ namespace Mat {
 		return o;
 	}
 
+	V4f V4f::operator-(void)
+	{
+		return V4f(-x, -y, -z, w);
+	}
+
 	V4f V4f::operator*(float f) {
 		// maybe disallow this if w==1? (positions ought to be changed by displacements, not by scaling them)
 		return V4f(f * x, f * y, f * z, w);
@@ -279,6 +309,11 @@ namespace Mat {
 
 	bool V4f::operator==(V4f v) {
 		return (x == v.x && y == v.y && z == v.z && w == v.w);
+	}
+
+	bool V4f::operator!=(V4f v)
+	{
+		return (x != v.x || y != v.y || z != v.z || w != v.w);
 	}
 
 	V4f::operator bool() const
@@ -322,6 +357,11 @@ namespace Mat {
 			o = V4f(0, 0, 0, 0); // norm == 0 only happens when input is also the zero vector
 		}
 		return o;
+	}
+
+	V3f V4f::drop_w(void)
+	{
+		return V3f(x, y, z);
 	}
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v) {
@@ -437,6 +477,28 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M22f::set_column(V2f col, int col_num)
+	{
+		m[0][col_num - 1] = col.x;
+		m[1][col_num - 1] = col.y;
+	}
+
+	void M22f::set_row(V2f row, int row_num)
+	{
+		m[row_num - 1][0] = row.x;
+		m[row_num - 1][0] = row.y;
+	}
+
+	V2f M22f::get_column(int col_num)
+	{
+		return V2f(m[0][col_num - 1], m[1][col_num - 1]);
+	}
+
+	V2f M22f::get_row(int row_num)
+	{
+		return V2f(m[row_num - 1][0], m[row_num - 1][1]);
 	}
 
 	float M22f::trace(void) {
@@ -557,6 +619,30 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M33f::set_column(V3f col, int col_num)
+	{
+		m[0][col_num - 1] = col.x;
+		m[1][col_num - 1] = col.y;
+		m[2][col_num - 1] = col.z;
+	}
+
+	void M33f::set_row(V3f row, int row_num)
+	{
+		m[row_num - 1][0] = row.x;
+		m[row_num - 1][1] = row.y;
+		m[row_num - 1][2] = row.z;
+	}
+
+	V3f M33f::get_column(int col_num)
+	{
+		return V3f(m[0][col_num - 1], m[1][col_num - 1], m[2][col_num - 1]);
+	}
+
+	V3f M33f::get_row(int row_num)
+	{
+		return V3f(m[row_num - 1][0], m[row_num - 1][1], m[row_num - 1][2]);
 	}
 
 	float M33f::trace(void) {
@@ -681,6 +767,32 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M44f::set_column(V4f col, int col_num)
+	{
+		m[0][col_num - 1] = col.x;
+		m[1][col_num - 1] = col.y;
+		m[2][col_num - 1] = col.z;
+		m[3][col_num - 1] = col.w;
+	}
+
+	void M44f::set_row(V4f row, int row_num)
+	{
+		m[row_num - 1][0] = row.x;
+		m[row_num - 1][1] = row.y;
+		m[row_num - 1][2] = row.z;
+		m[row_num - 1][3] = row.w;
+	}
+
+	V4f M44f::get_column(int col_num)
+	{
+		return V4f(m[0][col_num - 1], m[1][col_num - 1], m[2][col_num - 1], m[3][col_num - 1]);
+	}
+
+	V4f M44f::get_row(int row_num)
+	{
+		return V4f(m[row_num - 1][0], m[row_num - 1][1], m[row_num - 1][2], m[row_num - 1][3]);
 	}
 
 	float M44f::trace(void) {

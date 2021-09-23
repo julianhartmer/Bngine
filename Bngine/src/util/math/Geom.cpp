@@ -99,7 +99,7 @@ namespace Bngine {
 		return projected;
 	}
 
-	void Tri::move(V4f center, M44f move_mat)
+	void Tri::move(V4f center, M44f& move_mat)
 	{
 		for (int it = 0; it < 3; ++it)
 		{
@@ -111,9 +111,14 @@ namespace Bngine {
 	// Geom //
 	//////////
 
-	V4f Geom::center()
+	V4f Geom::position()
 	{
-		return _center;
+		return _position;
+	}
+
+	V3f Geom::rotation()
+	{
+		return _rotation;
 	}
 
 	std::vector<Tri> Geom::tris()
@@ -132,7 +137,7 @@ namespace Bngine {
 		return o;
 	}
 
-	void Geom::_calc_center(void)
+	V4f Geom::_calc_center(void)
 	{
 		V4f avg = V4f(0, 0, 0, 0); // we want to use the center as a displacement later on, even though it's an actual location, so w=0
 		int normalize = _tris.size()*3;
@@ -177,31 +182,35 @@ namespace Bngine {
 			avg += avg_tmp * it1->area();
 		}
 #endif // BARYCENTER 
-		_center = avg / float(normalize);
+		return (avg / float(normalize));
 	}
 
-	void Geom::_move(M44f move_mat)
+	void Geom::_move(M44f& move_mat)
 	{
 		// uses the center vector to virtually displace the mesh such that its center is in the origin, then apply the 4x4 mat, then add the center displacement again
 		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
-			it1->move(_center, move_mat);
-		}
-		_center.x += move_mat.m[0][3];
-		_center.y += move_mat.m[1][3];
-		_center.z += move_mat.m[2][3];
+			it1->move(_position, move_mat);
+		}	
 	}
 
-	void Geom::move(V3f translation, V3f rotation)
+	void Geom::move(V3f translation, V3f rotation, bool additive_translation, V3f rotation_point)
 	{
 		M44f move_mat = id44();
+		// motion simply added on top of current state
 		if (translation)
 		{
-			move_mat.m[0][3] = translation.x;
-			move_mat.m[1][3] = translation.y;
-			move_mat.m[2][3] = translation.z;
+			if (additive_translation)
+			{
+				move_mat.set_column(translation.add_w(1), 4);
+			}
+			else
+			{
+				V4f displacement = translation.add_w(1) - _position;
+				move_mat.set_column(displacement, 4);
+			}		
 		}
 		if (rotation)
-		{
+		{	
 			V3f rotation_rad = rotation * (M_PI / 180.0f);
 			move_mat.m[0][1] = cos(rotation_rad.z) * sin(rotation_rad.y) * sin(rotation_rad.x) - sin(rotation_rad.z) * cos(rotation_rad.x);
 			move_mat.m[0][2] = cos(rotation_rad.z) * sin(rotation_rad.y) * cos(rotation_rad.x) + sin(rotation_rad.z) * cos(rotation_rad.x);
@@ -211,9 +220,26 @@ namespace Bngine {
 			move_mat.m[0][0] = cos(rotation_rad.z) * cos(rotation_rad.y);
 			move_mat.m[1][0] = sin(rotation_rad.z) * cos(rotation_rad.y);
 			move_mat.m[2][1] = cos(rotation_rad.y) * sin(rotation_rad.x);
-			move_mat.m[2][2] = cos(rotation_rad.y) * cos(rotation_rad.x);
+			move_mat.m[2][2] = cos(rotation_rad.y) * cos(rotation_rad.x);	
+			if (rotation_point)
+			{
+				M44f trans_go, trans_back = id44();
+				trans_go.set_column(-rotation_point.add_w(1), 4);
+				trans_back.set_column(rotation_point.add_w(1), 4);
+				move_mat = trans_back * move_mat * trans_go;
+				//TODO: find out how rotation has to be changed
+			}
+			else
+			{
+				_rotation += rotation;
+			}
 		}
 		_move(move_mat);
+		// the following would also be affected by any rotation not around 0 0 0
+		if (additive_translation)
+			_position += move_mat.get_column(4);
+		else
+			_position = translation.add_w(1);
 	}
 
 	//////////
@@ -223,12 +249,15 @@ namespace Bngine {
 	Mesh::Mesh(std::vector<Tri> _tris)
 	{
 		this->_tris = _tris;
-		_calc_center();
+		_position = _calc_center();
+		_rotation = V3f(0, 0, 0);
 	}
 
 	Mesh::Mesh()
 	{
 		_tris.clear();
+		_position = V4f(0, 0, 0, 0);
+		_rotation = V3f(0, 0, 0);
 	}
 
 	Mesh::Mesh(std::string file_path, V3f pos)
@@ -262,14 +291,15 @@ namespace Bngine {
 			// skip attribute 16 byte
 			if (-1 == SDL_RWseek(file, 2, RW_SEEK_CUR))
 				goto error;
-			v[0] += pos;
-			v[1] += pos;
-			v[2] += pos;
+
 			_tris.push_back(Tri(v));
 		}
 
 		SDL_RWclose(file);
-		_calc_center();
+		_position = _calc_center();
+		if (desired_position != _position.drop_w())
+			move(desired_position, { 0,0,0 }, false);
+
 		return;
 	error:
 		std::cout << SDL_GetError();

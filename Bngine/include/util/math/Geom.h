@@ -24,7 +24,7 @@ namespace Bngine
 		V4f normal(void);
 		V4f vecs(int i);
 		float area(void);
-		void move(V4f displacement, M44f move_mat);
+		void move(V4f displacement, M44f& move_mat);
 		// ?
 		//V2f project(M44f);
 		Tri2D project(Camera c);
@@ -40,14 +40,16 @@ namespace Bngine
 	public:
 		std::vector<Tri> tris(void);
 		std::vector<Tri2D> project(Camera c);
-		V4f center();
-		void move(V3f translation, V3f rotation);
+		V4f position();
+		V3f rotation();
+		void move(V3f translation, V3f rotation, bool additive_translation=true, V3f rotation_point = { 0,0,0 });
 
 	protected:
 		std::vector<Tri> _tris;
-		V4f _center;
-		void _calc_center(void);
-		void _move(M44f move_mat);
+		V4f _position;
+		V3f _rotation;
+		V4f _calc_center(void);
+		void _move(M44f& move_mat);
 	};
 
 	// TODO after triangle rendered

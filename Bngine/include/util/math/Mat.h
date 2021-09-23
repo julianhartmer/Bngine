@@ -23,6 +23,7 @@ namespace Mat
 		void operator=(V2f v);
 		V2f operator+(V2f v);
 		V2f operator-(V2f v);
+		V2f operator-(void);
 		V2f operator*(float f);
 		V2f operator/(float f);
 		void operator+=(V2f v);
@@ -30,6 +31,7 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V2f v);
+		bool operator!=(V2f v);
 		explicit operator bool() const;
 
 		// methods
@@ -40,7 +42,7 @@ namespace Mat
 
 	std::ostream &operator<<(std::ostream &os, const V2f &v);
 
-
+	struct V4f; // forward declaration to make the add_w method compile
 	struct V3f
 	{
 		union {
@@ -59,6 +61,7 @@ namespace Mat
 		void operator=(V3f v);
 		V3f operator+(V3f v);
 		V3f operator-(V3f v);
+		V3f operator-(void);
 		V3f operator*(float f);
 		V3f operator/(float f);
 		void operator+=(V3f v);
@@ -66,12 +69,14 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V3f v);
+		bool operator!=(V3f v);
 		explicit operator bool() const;
 
 		float dot(V3f v);
 		V3f cross(V3f v);
 		float norm(void);
 		V3f normalized(void);
+		V4f add_w(float w);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V3f &v);
@@ -96,6 +101,7 @@ namespace Mat
 		void operator=(V4f v);
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
+		V4f operator-(void);
 		V4f operator*(float f);
 		V4f operator/(float f);
 		void operator+=(V4f v);
@@ -103,12 +109,14 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V4f v);
+		bool operator!=(V4f v);
 		explicit operator bool() const;
 
 		float dot(V4f v);
 		V4f cross(V4f v);
 		float norm(void);
 		V4f normalized(void);
+		V3f drop_w(void);
 	};
 
 	std::ostream &operator<<(std::ostream &os, const V4f &v);
@@ -136,6 +144,11 @@ namespace Mat
 		M22f operator/(float f);
 		V2f operator*(V2f v);
 		M22f operator*(M22f mat);
+
+		void set_column(V2f col, int col_num);
+		void set_row(V2f row, int row_num);
+		V2f get_column(int col_num);
+		V2f get_row(int row_num);
 
 		// == operator not defined for lack of use case (so far)
 		float trace(void);
@@ -169,6 +182,11 @@ namespace Mat
 		V3f operator*(V3f v);
 		M33f operator*(M33f mat);
 
+		void set_column(V3f col, int col_num);
+		void set_row(V3f row, int row_num);
+		V3f get_column(int col_num);
+		V3f get_row(int row_num);
+
 		// == operator not defined for lack of use case (so far)
 		float trace(void);
 		M33f t(void);
@@ -199,6 +217,11 @@ namespace Mat
 		M44f operator/(float f);
 		V4f operator*(V4f v);
 		M44f operator*(M44f mat);
+
+		void set_column(V4f col, int col_num);
+		void set_row(V4f row, int row_num);
+		V4f get_column(int col_num);
+		V4f get_row(int row_num);
 
 		float trace(void);
 		M44f t(void);
