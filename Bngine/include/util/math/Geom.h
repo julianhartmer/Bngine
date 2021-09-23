@@ -38,7 +38,7 @@ namespace Bngine
 
 	class Geom {
 	public:
-		std::vector<Tri> tris();
+		std::vector<Tri> tris(void);
 		std::vector<Tri2D> project(Camera c);
 		V4f center();
 		void move(V3f translation, V3f rotation);
@@ -54,7 +54,7 @@ namespace Bngine
 	class Mesh : public Geom {
 	public:
 		Mesh(std::vector<Tri> _tris);
-		Mesh(std::string file_path, float x, float y, float z);
+		Mesh(std::string file_path, V3f pos);
 		Mesh();
 
 		void operator<<(Tri t);
@@ -64,30 +64,29 @@ namespace Bngine
 	public:
 		// TODO add rotation m33f
 		Cube(V3f pos, float l);
-		Cube(float x, float y, float z, float l);
 
 	private:
-		std::vector<Tri> _calc_tris(float x, float y, float z, float l);
+		std::vector<Tri> _calc_tris(V3f pos, float l);
 
 	};
 
 	class Pyramid : public Geom {
 	public:
 		// TODO add rotation m33f
-		Pyramid(float x, float y, float z, float l, float h);
+		Pyramid(V3f pos, float l, float h);
 
 	private:
-		std::vector<Tri> _calc_tris(float x, float y, float z, float l, float h);
+		std::vector<Tri> _calc_tris(V3f pos, float l, float h);
 
 	};
 
 	class Icosahedron : public Geom {
 	public:
 		// TODO add rotation m33f
-		Icosahedron(float x, float y, float z, float l);
+		Icosahedron(V3f pos, float l);
 
 	private:
-		std::vector<Tri> _calc_tris(float x, float y, float z, float l);
+		std::vector<Tri> _calc_tris(V3f pos, float l);
 	};
 
 }

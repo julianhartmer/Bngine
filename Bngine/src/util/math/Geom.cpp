@@ -226,17 +226,17 @@ namespace Bngine {
 		_calc_center();
 	}
 
-	Mesh::Mesh() {
+	Mesh::Mesh()
+	{
 		_tris.clear();
 	}
 
-	Mesh::Mesh(std::string file_path, float x, float y, float z)
+	Mesh::Mesh(std::string file_path, V3f pos)
 	{
 		SDL_RWops* file;
 		uint32_t tris_num;
 		float norm[3];
 		V3f v[3];
-		V3f displacement(x, y, z);
 
 		_tris.clear();
 		file = SDL_RWFromFile(file_path.c_str(), "r");
@@ -262,11 +262,10 @@ namespace Bngine {
 			// skip attribute 16 byte
 			if (-1 == SDL_RWseek(file, 2, RW_SEEK_CUR))
 				goto error;
-			v[0] += displacement;
-			v[1] += displacement;
-			v[2] += displacement;
+			v[0] += pos;
+			v[1] += pos;
+			v[2] += pos;
 			_tris.push_back(Tri(v));
-
 		}
 
 		SDL_RWclose(file);
@@ -287,29 +286,23 @@ namespace Bngine {
 
 	Cube::Cube(V3f pos, float l)
 	{
-		_tris = _calc_tris(pos.x, pos.y, pos.z, l);
+		_tris = _calc_tris(pos, l);
 		_calc_center();
 	}
 
-	Cube::Cube(float x, float y, float z, float l)
-	{
-		_tris = _calc_tris(x, y, z, l);
-		_calc_center();
-	}
-
-	std::vector<Tri> Cube::_calc_tris(float x, float y, float z, float l)
+	std::vector<Tri> Cube::_calc_tris(V3f pos, float l)
 	{
 		std::vector<Tri> _tris;
 		V3f front[4];
 		V3f back[4];
-		front[0] = V3f(x, y, z);
-		front[1] = V3f(x + l, y, z);
-		front[2] = V3f(x + l, y + l, z);
-		front[3] = V3f(x, y + l, z);
-		back[0] = V3f(x, y, z + l);
-		back[1] = V3f(x + l, y, z + l);
-		back[2] = V3f(x + l, y + l, z + l);
-		back[3] = V3f(x, y + l, z + l);
+		front[0] = pos;
+		front[1] = pos + V3f({ 1, 0, 0 });
+		front[2] = pos + V3f({ 1, 1, 0 });
+		front[3] = pos + V3f({ 0, l, 0 });
+		back[0] = pos + V3f({ 0, 0, l });
+		back[1] = pos + V3f({ l, 0, l });
+		back[2] = pos + V3f({ l, l, l });
+		back[3] = pos + V3f({ 0, l, l });
 
 		// front
 		_tris.push_back(Tri({ front[0], front[1], front[3] }));
@@ -342,21 +335,21 @@ namespace Bngine {
 	// Pyramid //
 	/////////////
 
-	Pyramid::Pyramid(float x, float y, float z, float l, float h)
+	Pyramid::Pyramid(V3f pos, float l, float h)
 	{
-		_tris = _calc_tris(x, y, z, l, h);
+		_tris = _calc_tris(pos, l, h);
 		_calc_center();
 	}
 
-	std::vector<Tri> Pyramid::_calc_tris(float x, float y, float z, float l, float h)
+	std::vector<Tri> Pyramid::_calc_tris(V3f pos, float l, float h)
 	{
 		std::vector<Tri> _tris;
 		V3f baseandtip[5];
-		baseandtip[0] = V3f(x, y, z);
-		baseandtip[1] = V3f(x + l, y, z);
-		baseandtip[2] = V3f(x + l, y, z + l);
-		baseandtip[3] = V3f(x, y, z + l);
-		baseandtip[4] = V3f(x + (l / 2.0f), y + h, z + (l / 2.0f));
+		baseandtip[0] = pos;
+		baseandtip[1] = pos + V3f(l, 0, 0);
+		baseandtip[2] = pos + V3f(l, 0, l);
+		baseandtip[3] = pos + V3f(0, 0, l);
+		baseandtip[4] = pos + V3f(l / 2.0f, h, l / 2.0f);
 
 		// bottom
 		_tris.push_back(Tri({ baseandtip[0], baseandtip[1], baseandtip[3] }));
@@ -381,17 +374,17 @@ namespace Bngine {
 	// Icosahedron //
 	/////////////////
 
-	Icosahedron::Icosahedron(float x, float y, float z, float l)
+	Icosahedron::Icosahedron(V3f pos, float l)
 	{
-		_tris = _calc_tris(x, y, z, l);
+		_tris = _calc_tris(pos, l);
 		_calc_center();
 	}
 
-	std::vector<Tri> Icosahedron::_calc_tris(float x, float y, float z, float l)
+	std::vector<Tri> Icosahedron::_calc_tris(V3f pos, float l)
 	{
 		float phi = 2.61803f; // golden ratio
 		std::vector<Tri> _tris;
-		V3f displacement = V3f(x, y, z);
+		V3f displacement = V3f(pos);
 		V3f corners[12];
 		float len_mul = l / 2.0f;
 		// corners of a Icosahedron of edge length 2 taken from Wikipedia
