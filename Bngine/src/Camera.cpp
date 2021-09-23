@@ -122,13 +122,10 @@ namespace Bngine {
 		_mProjection.m[2][2] = _clipping_far / (_clipping_far - _clipping_near);
 		_mProjection.m[3][2] = _mProjection.m[2][2] * -_clipping_near;
 	}
+
 	void Camera::set_position(V3f position)
 	{
-		//translation
-		_mPosition.m[3][3] = 1; //homogenous component
-		_mPosition.m[0][3] = position.x;
-		_mPosition.m[1][3] = position.y;
-		_mPosition.m[2][3] = position.z;
+		_mPosition.set_column(position.add_w(1), 4);
 	}
 
 	void Camera::set_rotation(V3f rotation)
@@ -166,7 +163,7 @@ namespace Bngine {
 
 	void Camera::set_direction(V3f direction)
 	{
-		V3f old_dir_norm = V3f(_vDirection.x, _vDirection.y, _vDirection.z); //assuming at this point that the old stored direction is normalized
+		V3f old_dir_norm = _vDirection.drop_w(); //assuming at this point that the old stored direction is normalized
 		V3f new_dir_norm = direction.normalized();
 
 		V3f v = old_dir_norm.cross(new_dir_norm);
@@ -194,6 +191,6 @@ namespace Bngine {
 		_vRotation.y = atan2(-_mPosition._31, sqrt(_mPosition._32 * _mPosition._32 + _mPosition._33 * _mPosition._33)) * (180.f / M_PI);
 		_vRotation.z = atan2(_mPosition._21, _mPosition._11) * (180.f / M_PI);
 		//finally write new direciton into storage
-		_vDirection = V4f(new_dir_norm.x, new_dir_norm.y, new_dir_norm.z, 0);
+		_vDirection = new_dir_norm.add_w(0);
 	}
 }
