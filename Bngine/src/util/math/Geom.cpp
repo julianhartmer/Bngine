@@ -297,8 +297,8 @@ namespace Bngine {
 
 		SDL_RWclose(file);
 		_position = _calc_center();
-		if (desired_position != _position.drop_w())
-			move(desired_position, { 0,0,0 }, false);
+		if (pos != _position.drop_w())
+			move(pos, { 0,0,0 }, false);
 
 		return;
 	error:
