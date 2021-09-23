@@ -198,6 +198,11 @@ namespace Mat {
 		return o;
 	}
 
+	V4f V3f::add_w(float w)
+	{
+		return V4f(x, z, y, w);
+	}
+
 	std::ostream &operator<<(std::ostream &os, const V3f &v) {
 		return os << "[" << v.x << "; " << std::endl << v.y << "; " << std::endl << v.z << "]";
 	}
@@ -324,6 +329,11 @@ namespace Mat {
 		return o;
 	}
 
+	V3f V4f::drop_w(void)
+	{
+		return V3f(x, y, z);
+	}
+
 	std::ostream &operator<<(std::ostream &os, const V4f &v) {
 		return os << "[" << v.x << "; " << std::endl << v.y << "; " << std::endl << v.z << "; " << std::endl << v.w << "]";
 	}
@@ -437,6 +447,28 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M22f::set_column(V2f col, int col_num)
+	{
+		m[0][col_num + 1] = col.x;
+		m[1][col_num + 1] = col.y;
+	}
+
+	void M22f::set_row(V2f row, int row_num)
+	{
+		m[row_num + 1][0] = row.x;
+		m[row_num + 1][0] = row.y;
+	}
+
+	V2f M22f::get_column(int col_num)
+	{
+		return V2f(m[0][col_num + 1], m[1][col_num + 1]);
+	}
+
+	V2f M22f::get_row(int row_num)
+	{
+		return V2f(m[row_num + 1][0], m[row_num + 1][1]);
 	}
 
 	float M22f::trace(void) {
@@ -557,6 +589,30 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M33f::set_column(V3f col, int col_num)
+	{
+		m[0][col_num + 1] = col.x;
+		m[1][col_num + 1] = col.y;
+		m[2][col_num + 1] = col.z;
+	}
+
+	void M33f::set_row(V3f row, int row_num)
+	{
+		m[row_num + 1][0] = row.x;
+		m[row_num + 1][1] = row.y;
+		m[row_num + 1][2] = row.z;
+	}
+
+	V3f M33f::get_column(int col_num)
+	{
+		return V3f(m[0][col_num + 1], m[1][col_num + 1], m[2][col_num + 1]);
+	}
+
+	V3f M33f::get_row(int row_num)
+	{
+		return V3f(m[row_num + 1][0], m[row_num + 1][1], m[row_num + 1][2]);
 	}
 
 	float M33f::trace(void) {
@@ -681,6 +737,32 @@ namespace Mat {
 			}
 		}
 		return o;
+	}
+
+	void M44f::set_column(V4f col, int col_num)
+	{
+		m[0][col_num + 1] = col.x;
+		m[1][col_num + 1] = col.y;
+		m[2][col_num + 1] = col.z;
+		m[3][col_num + 1] = col.w;
+	}
+
+	void M44f::set_row(V4f row, int row_num)
+	{
+		m[row_num + 1][0] = row.x;
+		m[row_num + 1][1] = row.y;
+		m[row_num + 1][2] = row.z;
+		m[row_num + 1][3] = row.w;
+	}
+
+	V4f M44f::get_column(int col_num)
+	{
+		return V4f(m[0][col_num + 1], m[1][col_num + 1], m[2][col_num + 1], m[3][col_num + 1]);
+	}
+
+	V4f M44f::get_row(int row_num)
+	{
+		return V4f(m[row_num + 1][0], m[row_num + 1][1], m[row_num + 1][2], m[row_num + 1][3]);
 	}
 
 	float M44f::trace(void) {
