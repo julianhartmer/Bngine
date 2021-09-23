@@ -205,8 +205,8 @@ namespace Bngine {
 			}
 			else
 			{
-				V3f displacement = translation - _position.drop_w();
-				move_mat.set_column(displacement.add_w(1), 4);
+				V4f displacement = translation.add_w(1) - _position;
+				move_mat.set_column(displacement, 4);
 			}		
 		}
 		if (rotation)
@@ -235,6 +235,7 @@ namespace Bngine {
 			}
 		}
 		_move(move_mat);
+		// the following would also be affected by any rotation not around 0 0 0
 		if (additive_translation)
 			_position += move_mat.get_column(4);
 		else
@@ -264,8 +265,7 @@ namespace Bngine {
 		uint32_t tris_num;
 		float norm[3];
 		V3f v[3];
-		V4f displacement(x, y, z, 0);
-		M44f move_mat;
+		V3f desired_position(x, y, z);
 
 		_tris.clear();
 		file = SDL_RWFromFile(file_path.c_str(), "r");
@@ -298,7 +298,8 @@ namespace Bngine {
 
 		SDL_RWclose(file);
 		_position = _calc_center();
-		move(displacement.drop_w(), { 0,0,0 }, false);
+		if (desired_position != _position.drop_w())
+			move(desired_position, { 0,0,0 }, false);
 
 		return;
 	error:

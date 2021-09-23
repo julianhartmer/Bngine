@@ -31,6 +31,7 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V2f v);
+		bool operator!=(V2f v);
 		explicit operator bool() const;
 
 		// methods
@@ -68,6 +69,7 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V3f v);
+		bool operator!=(V3f v);
 		explicit operator bool() const;
 
 		float dot(V3f v);
@@ -107,6 +109,7 @@ namespace Mat
 		void operator*=(float f);
 		void operator/=(float f);
 		bool operator==(V4f v);
+		bool operator!=(V4f v);
 		explicit operator bool() const;
 
 		float dot(V4f v);

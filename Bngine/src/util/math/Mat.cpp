@@ -65,6 +65,11 @@ namespace Mat {
 		return (x == v.x && y == v.y);
 	}
 
+	bool V2f::operator!=(V2f v)
+	{
+		return (x != v.x || y != v.y);
+	}
+
 	V2f::operator bool() const
 	{
 		if (x == 0 && y == 0)
@@ -168,6 +173,11 @@ namespace Mat {
 
 	bool V3f::operator==(V3f v) {
 		return (x == v.x && y == v.y && z == v.z);
+	}
+
+	bool V3f::operator!=(V3f v)
+	{
+		return (x != v.x || y != v.y || z != v.z);
 	}
 
 	V3f::operator bool() const
@@ -299,6 +309,11 @@ namespace Mat {
 
 	bool V4f::operator==(V4f v) {
 		return (x == v.x && y == v.y && z == v.z && w == v.w);
+	}
+
+	bool V4f::operator!=(V4f v)
+	{
+		return (x != v.x || y != v.y || z != v.z || w != v.w);
 	}
 
 	V4f::operator bool() const
