@@ -41,7 +41,7 @@ namespace Mat
 
 	std::ostream &operator<<(std::ostream &os, const V2f &v);
 
-
+	struct V4f; // forward declaration to make the add_w method compile
 	struct V3f
 	{
 		union {
