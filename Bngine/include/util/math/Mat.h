@@ -23,6 +23,7 @@ namespace Mat
 		void operator=(V2f v);
 		V2f operator+(V2f v);
 		V2f operator-(V2f v);
+		V2f operator-(void);
 		V2f operator*(float f);
 		V2f operator/(float f);
 		void operator+=(V2f v);
@@ -59,6 +60,7 @@ namespace Mat
 		void operator=(V3f v);
 		V3f operator+(V3f v);
 		V3f operator-(V3f v);
+		V3f operator-(void);
 		V3f operator*(float f);
 		V3f operator/(float f);
 		void operator+=(V3f v);
@@ -97,6 +99,7 @@ namespace Mat
 		void operator=(V4f v);
 		V4f operator+(V4f v);
 		V4f operator-(V4f v);
+		V4f operator-(void);
 		V4f operator*(float f);
 		V4f operator/(float f);
 		void operator+=(V4f v);

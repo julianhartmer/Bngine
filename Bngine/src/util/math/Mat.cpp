@@ -32,6 +32,11 @@ namespace Mat {
 		return V2f(x - v.x, y - v.y);
 	}
 
+	V2f V2f::operator-(void)
+	{
+		return V2f(-x, -y);
+	}
+
 	V2f V2f::operator*(float f) {
 		return V2f(f * x, f * y);
 	}
@@ -130,6 +135,11 @@ namespace Mat {
 
 	V3f V3f::operator-(V3f v) {
 		return V3f(x - v.x, y - v.y, z - v.z);
+	}
+
+	V3f V3f::operator-(void)
+	{
+		return V3f(-x,-y,-z);
 	}
 
 	V3f V3f::operator*(float f) {
@@ -254,6 +264,11 @@ namespace Mat {
 			o.w = 1;
 		}
 		return o;
+	}
+
+	V4f V4f::operator-(void)
+	{
+		return V4f(-x, -y, -z, w);
 	}
 
 	V4f V4f::operator*(float f) {
