@@ -29,17 +29,16 @@ namespace Bngine
 
 	class Geom {
 	public:
-		std::vector<Tri> tris(void);
+		bool tris(std::vector<Tri>::iterator& out_start, std::vector<Tri>::iterator& out_end);
 		std::vector<Tri2D> project(Camera c);
-		V4f position();
-		V3f rotation();
+		V4f pos();
+		V3f rot();
 		void move(V3f translation, V3f rotation, bool additive_translation=true, V3f rotation_point = { 0,0,0 });
+		uint64_t id;
 
 	protected:
-		std::vector<Tri> _tris;
-		V4f _position;
-		V3f _rotation;
 		V4f _calc_center(void);
+		V4f _calc_center(std::vector<Tri>& tris);
 		void _move(M44f& move_mat);
 	};
 
@@ -48,9 +47,6 @@ namespace Bngine
 	public:
 		Mesh(std::vector<Tri> _tris);
 		Mesh(std::string file_path, V3f pos);
-		Mesh();
-
-		void operator<<(Tri t);
 	};
 
 	class Cube : public Geom {

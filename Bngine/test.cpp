@@ -4,6 +4,7 @@
 #include "include/util/math/Mat.h"
 #include "include/util/math/Geom.h"
 #include "include/Renderer.h"
+#include "internal/GeomData.h"
 
 #undef main
 

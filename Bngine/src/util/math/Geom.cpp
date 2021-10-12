@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "util/math/Geom.h"
+#include "internal/GeomData.h"
 #include "SDL.h"
 
 #define BARYCENTER_CENTER_OF_VERTICES 0
@@ -76,26 +77,30 @@ namespace Bngine {
 	// Geom //
 	//////////
 
-	V4f Geom::position()
+	V4f Geom::pos()
 	{
-		return _position;
+		return GeomData::getInstance().pos[id];
 	}
 
-	V3f Geom::rotation()
+	V3f Geom::rot()
 	{
-		return _rotation;
+		return GeomData::getInstance().rot[id];
 	}
 
-	std::vector<Tri> Geom::tris()
+	bool Geom::tris(std::vector<Tri>::iterator& out_start, std::vector<Tri>::iterator& out_end)
 	{
-		return _tris;
+		GeomData::getInstance().get_tris(id, out_start, out_end);
+		return true;
 	}
 
 	std::vector<Tri2D> Geom::project(Camera c)
 	{
-		std::vector<Tri2D> o;
+		std::vector<Tri>::iterator tris_start, tris_end;
+		GeomData::getInstance().get_tris(id, tris_start, tris_end);
 
-		for (auto it = _tris.begin(); it != _tris.end(); ++it) {
+		std::vector<Tri2D> o;
+		
+		for (auto it = tris_start; it != tris_end; ++it) {
 			o.push_back(it->project(c));
 		}
 
@@ -104,12 +109,15 @@ namespace Bngine {
 
 	V4f Geom::_calc_center(void)
 	{
+		std::vector<Tri>::iterator tris_start, tris_end;
+		GeomData::getInstance().get_tris(id, tris_start, tris_end);
+
 		V4f avg = V4f(0, 0, 0, 0); // we want to use the center as a displacement later on, even though it's an actual location, so w=0
 		
-		int normalize = _tris.size()*3;
+		int normalize = (tris_end - tris_start) * 3;
 #if BARYCENTER == BARYCENTER_CENTER_OF_VERTICES
 		// center of vertices: simple average of vertex coordinates
-		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
+		for (auto it1 = tris_start; it1 != tris_end; ++it1) {
 			for (int it2 = 0; it2 < 3; ++it2)
 			{
 				avg.x += it1->vecs(it2).x;
@@ -120,7 +128,7 @@ namespace Bngine {
 #elif BARYCENTER == BARYCENTER_CENTER_OF_EDGES
 		// center of edges: average of edge midpoints weighted by edge length
 		V4f tmp1, tmp2, tmp3;
-		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
+		for (auto it1 = tris_start; it1 != tris_end; ++it1) {
 			tmp1 = ((it1->vecs(0) - it1->vecs(1)) / 2 + it1->vecs(1)) * (it1->vecs(0) - it1->vecs(1)).norm();
 			tmp2 = ((it1->vecs(1) - it1->vecs(2)) / 2 + it1->vecs(2)) * (it1->vecs(1) - it1->vecs(2)).norm();
 			tmp3 = ((it1->vecs(2) - it1->vecs(0)) / 2 + it1->vecs(0)) * (it1->vecs(2) - it1->vecs(0)).norm();
@@ -137,7 +145,7 @@ namespace Bngine {
 		}
 #elif BARYCENTER == BARYCENTER_CENTER_OF_POLYGON
 		// center of polygon: average of the vertex coordinates weighted by polygon (tri) area
-		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
+		for (auto it1 = tris_start; it1 != tris_end; ++it1) {
 			V4f avg_tmp = V4f(0, 0, 0, 0);
 			for (int it2 = 0; it2 < 3; ++it2)
 			{
@@ -151,11 +159,19 @@ namespace Bngine {
 		return (avg / float(normalize));
 	}
 
+	V4f Geom::_calc_center(std::vector<Tri>& tris)
+	{
+		return V4f();
+	}
+
 	void Geom::_move(M44f& move_mat)
 	{
+		std::vector<Tri>::iterator tris_start, tris_end;
+		GeomData::getInstance().get_tris(id, tris_start, tris_end);
+
 		// uses the center vector to virtually displace the mesh such that its center is in the origin, then apply the 4x4 mat, then add the center displacement again
-		for (auto it1 = _tris.begin(); it1 != _tris.end(); ++it1) {
-			it1->move(_position, move_mat);
+		for (auto it1 = tris_start; it1 != tris_end; ++it1) {
+			it1->move(pos(), move_mat);
 		}	
 	}
 
@@ -180,7 +196,7 @@ namespace Bngine {
 			}
 			else
 			{
-				V4f displacement = translation.add_w(1) - _position;
+				V4f displacement = translation.add_w(1) - pos();
 				move_mat.set_column(displacement, 4);
 			}		
 		}
@@ -206,18 +222,22 @@ namespace Bngine {
 			}
 			else
 			{
-				_rotation += rotation;
+				// TODO: replace with setter method or something else (refernce maybe)
+				//_rotation += rotation;
 			}
 		}
 		_move(move_mat);
 		// the following would also be affected by any rotation not around 0 0 0
 		if (additive_translation)
 		{
-			_position += move_mat.get_column(4);
-			_position.w = 0;
+			// TODO: same as above
+			//_position += move_mat.get_column(4);
+			//_position.w = 0;
+			1 == 1;
 		}
 		else
-			_position = translation.add_w(0);
+			1 == 1;
+			//_position = translation.add_w(0);
 	}
 
 	//////////
@@ -226,24 +246,19 @@ namespace Bngine {
 
 	Mesh::Mesh(std::vector<Tri> _tris)
 	{
-		this->_tris = _tris;
-		_position = _calc_center();
-		_rotation = V3f(0, 0, 0);
-	}
-
-	Mesh::Mesh()
-	{
-		_tris.clear();
-		_position = V4f(0, 0, 0, 0);
-		_rotation = V3f(0, 0, 0);
+		id = GeomData::getInstance().insert(_tris, _calc_center(_tris), V3f(0, 0, 0));
 	}
 
 	Mesh::Mesh(std::string file_path, V3f pos)
 	{
+
 		SDL_RWops* file;
 		uint32_t tris_num;
 		float norm[3];
 		V3f v[3];
+		V4f temp_pos;
+
+		std::vector<Tri> _tris;
 
 		_tris.clear();
 		file = SDL_RWFromFile(file_path.c_str(), "r");
@@ -274,8 +289,12 @@ namespace Bngine {
 		}
 
 		SDL_RWclose(file);
-		_position = _calc_center();
-		if (pos != _position.drop_w())
+
+		temp_pos = _calc_center(_tris);
+
+		id = GeomData::getInstance().insert(_tris, temp_pos, V3f(0, 0, 0));;
+
+		if (pos != temp_pos.drop_w())
 			move(pos, { 0,0,0 }, false);
 
 		return;
@@ -284,18 +303,14 @@ namespace Bngine {
 		return;
 	}
 
-	void Mesh::operator<<(Tri t) {
-		_tris.push_back(t);
-	}
-
 	//////////
 	// Cube //
 	//////////
 
 	Cube::Cube(V3f pos, float l)
 	{
-		_tris = _calc_tris(pos, l);
-		_calc_center();
+		std::vector<Tri> _tris = _calc_tris(pos, l);
+		id = GeomData::getInstance().insert(_tris, _calc_center(_tris), V3f(0, 0, 0));
 	}
 
 	std::vector<Tri> Cube::_calc_tris(V3f pos, float l)
@@ -345,8 +360,8 @@ namespace Bngine {
 
 	Pyramid::Pyramid(V3f pos, float l, float h)
 	{
-		_tris = _calc_tris(pos, l, h);
-		_calc_center();
+		std::vector<Tri> _tris = _calc_tris(pos, l, h);
+		id = GeomData::getInstance().insert(_tris, _calc_center(_tris), V3f(0, 0, 0));
 	}
 
 	std::vector<Tri> Pyramid::_calc_tris(V3f pos, float l, float h)
@@ -384,8 +399,8 @@ namespace Bngine {
 
 	Icosahedron::Icosahedron(V3f pos, float l)
 	{
-		_tris = _calc_tris(pos, l);
-		_calc_center();
+		std::vector<Tri> _tris = _calc_tris(pos, l);
+		id = GeomData::getInstance().insert(_tris, _calc_center(_tris), V3f(0, 0, 0));
 	}
 
 	std::vector<Tri> Icosahedron::_calc_tris(V3f pos, float l)
