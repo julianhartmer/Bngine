@@ -45,8 +45,30 @@ namespace Bngine{
 
 	bool GeomData::remove(uint64_t id)
 	{
-		//TODO
-		return false;
+		// TODO fix this slow remove function
+		if (indices.find(id) == indices.end())
+			return false;
+
+		int tri_diff = indices[id].tri_end - indices[id].tri_start;
+
+
+		// find all ids that are bigger
+		for (auto &i: indices) {
+			if (i.first > id) {
+				i.second.pos -= 1;
+				i.second.rot -= 1;
+				i.second.tri_end -= tri_diff;
+				i.second.tri_start -= tri_diff;
+			}
+		}
+
+		// remove all data from tris, pos and rot
+		pos.erase(pos.begin() + indices[id].pos);
+		rot.erase(rot.begin() + indices[id].rot);
+		tris.erase(tris.begin() + indices[id].tri_start, tris.begin() + indices[id].tri_end);
+		indices.erase(id);
+
+		return true;
 	}
 
 }

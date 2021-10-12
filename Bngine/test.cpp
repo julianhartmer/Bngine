@@ -24,8 +24,10 @@ int main()
 	Renderer rend = Renderer(cam);
 	rend.add_geom(c);
 	rend.add_geom(p);
-	rend.add_geom(i);
 	rend.add_geom(m);
+
+	GeomData::getInstance().remove(i.id);
+
 
 	M44f move_mat = id44();
 
