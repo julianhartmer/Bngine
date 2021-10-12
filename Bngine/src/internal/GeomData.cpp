@@ -31,7 +31,7 @@ namespace Bngine{
 	uint64_t GeomData::insert(std::vector<Tri>& tris, V4f pos, V3f rot)
 	{
 		indices[_next_id].tri_start = this->tris.size();
-		indices[_next_id].tri_end = indices[_next_id].tri_start + this->tris.size();
+		indices[_next_id].tri_end = indices[_next_id].tri_start + tris.size();
 		this->tris.insert(this->tris.end(), tris.begin(), tris.end());
 
 		indices[_next_id].pos = this->pos.size();
