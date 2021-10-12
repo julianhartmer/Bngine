@@ -14,26 +14,17 @@ namespace Bngine
 	class Tri {
 	public:
 		Tri(const V3f(&vecs)[3]);
-
-		/*Tri operator*(float f);
-		Tri operator/(float f);
-		void operator*=(float f);
-		void operator/=(float f);
-		void operator=(Tri t);*/
-
 		V4f normal(void);
 		V4f vecs(int i);
 		float area(void);
 		void move(V4f displacement, M44f& move_mat);
-		// ?
-		//V2f project(M44f);
 		Tri2D project(Camera c);
 
 	private:
 		V4f _vecs[3];
 		V4f _normal;
 
-		V4f update_normal(void);
+		V4f _update_normal(void);
 	};
 
 	class Geom {

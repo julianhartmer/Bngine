@@ -12,44 +12,8 @@ namespace Bngine {
 	Tri::Tri(const V3f(&vecs)[3]) {
 		for (int i = 0; i < 3; ++i)
 			_vecs[i] = V4f(vecs[i].x, vecs[i].y, vecs[i].z, 1);
-		_normal = update_normal();
+		_normal = _update_normal();
 	}
-
-	//void Tri::operator=(Tri t) {
-	//	_v[0] = t.v(0);
-	//	_v[1] = t.v(1);
-	//	_v[2] = t.v(2);
-	//	_normal = t.normal();
-	//}
-
-	/*Tri Tri::operator*(float f) {
-		return Tri({ _v[0] * f, _v[1] * f, _v[2] * f });
-	}
-
-	Tri Tri::operator/(float f) {
-		return Tri({ _v[0] / f, _v[1] / f, _v[2] / f });
-	}
-
-	void Tri::operator*=(float f) {
-		Tri o = *this;
-
-		for (int i = 0; i < 3; ++i) {
-			_v[i] = _v[i] * f;
-		}
-
-		return o;
-	}*/
-
-	//void Tri::operator/=(float f) {
-	//	Tri o = *this;
-
-	//	for (int i = 0; i < 3; ++i) {
-	//		_v[i] = _v[i] / f;
-	//	}
-
-	//	return o;
-	//}
-
 
 	/**
 	*
@@ -74,7 +38,7 @@ namespace Bngine {
 		return _vecs[i];
 	}
 
-	V4f Tri::update_normal(void)
+	V4f Tri::_update_normal(void)
 	{
 		V4f a, b;
 		a = _vecs[1] - _vecs[0];
@@ -105,6 +69,7 @@ namespace Bngine {
 		{
 			_vecs[it] = (move_mat * (_vecs[it] - center)) + center;
 		}
+		_update_normal();
 	}
 
 	//////////
@@ -140,6 +105,7 @@ namespace Bngine {
 	V4f Geom::_calc_center(void)
 	{
 		V4f avg = V4f(0, 0, 0, 0); // we want to use the center as a displacement later on, even though it's an actual location, so w=0
+		
 		int normalize = _tris.size()*3;
 #if BARYCENTER == BARYCENTER_CENTER_OF_VERTICES
 		// center of vertices: simple average of vertex coordinates
@@ -193,10 +159,19 @@ namespace Bngine {
 		}	
 	}
 
+	/**
+	*
+	*	Moves a geom via rotation and translation (in that order). Via the optional parameters it can be specified whether motion is relative to current position or to the origin. For rotation
+	*   a point of reference can be given, otherwise the geom's center is used.
+	*
+	*	\param translation V3f vector that contains the desired displacement (or the target position of the geom's center, if addtive_motion is set to false)
+	*   \param rotation V3f vector that contains the desired additive rotation around the geom's center (or rotation_point, if it is non-zero)
+	*   \param additive_rotation Bool that determines whether translation will be added on top of the current position or interpreted as target coordinates for the geom's center
+	*   \param rotation_point V3f that determines the point around which the rotation will be performed, if left out will default to geom's center
+	**/
 	void Geom::move(V3f translation, V3f rotation, bool additive_translation, V3f rotation_point)
 	{
 		M44f move_mat = id44();
-		// motion simply added on top of current state
 		if (translation)
 		{
 			if (additive_translation)
@@ -237,9 +212,12 @@ namespace Bngine {
 		_move(move_mat);
 		// the following would also be affected by any rotation not around 0 0 0
 		if (additive_translation)
+		{
 			_position += move_mat.get_column(4);
+			_position.w = 0;
+		}
 		else
-			_position = translation.add_w(1);
+			_position = translation.add_w(0);
 	}
 
 	//////////
