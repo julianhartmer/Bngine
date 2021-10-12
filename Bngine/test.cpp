@@ -1,97 +1,49 @@
+#include <filesystem>
+
 #include "SDL.h"
 #include "include/util/math/Mat.h"
+#include "include/util/math/Geom.h"
+#include "include/Renderer.h"
 
 #undef main
 
 using namespace Mat;
+using namespace Bngine;
 
 int main()
 {
+	// Gameloop
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_CreateWindow("Bngine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1500, 1000, 0);
-	V2f test;
-	test.x = 10;
-	test.y = 12;
-	SDL_Delay(1000);
+	int x = 1500, y = 1000;
+	Camera cam = Camera(x, y, V3f(0, 0, 0), 120, 1, 3000);
+	Mesh m = Mesh("data/monke.stl", { 3, 3, 4 });
+	Cube c = Cube({ 9, 3, 8 }, 2);
+	Pyramid p = Pyramid({ -9, 3, 20 }, 2, 3);
+	Icosahedron i = Icosahedron({ 2, 1, 10 }, 1);
+	Renderer rend = Renderer(cam);
+	rend.add_geom(c);
+	rend.add_geom(p);
+	rend.add_geom(i);
+	rend.add_geom(m);
+
+	M44f move_mat = id44();
+
+	for (float j = 0;j < 4000;j += 0.002)
+	{
+		rend.render();
+		
+		//cam.set_rotation(V3f(0, j * 2, j));
+		c.move(V3f(0, 0, -j), V3f(0, 0, 0.05));
+		i.move(V3f(0, 0, 0), V3f(0, 0, 0.15));
+		//c.translate(V3f(0, 0, j));
+		//i.translate(V3f(0, 0, -j / 10));
+		SDL_Delay(10);
+		
+	}
+
 	
-	M22f mat1, mat2;
-	mat1._11 = 1;
-	mat1._12 = 2;
-	mat1._21 = 1;
-	mat1._22 = 3;
-	mat2._11 = 2;
-	mat2._12 = 3;
-	mat2._21 = 2;
-	mat2._22 = 5;
 
-	M33f mat13, mat23;
-	mat13._11 = 1;
-	mat13._12 = 2;
-	mat13._13 = 3;
-	mat13._21 = 1;
-	mat13._22 = 3;
-	mat13._23 = 4;
-	mat13._31 = 1;
-	mat13._32 = 3;
-	mat13._33 = 4;
-	mat23._11 = 2;
-	mat23._12 = 3;
-	mat23._13 = 3;
-	mat23._21 = 2;
-	mat23._22 = 5;
-	mat23._23 = 3;
-	mat23._31 = 3;
-	mat23._32 = 3;
-	mat23._33 = 3;
-
-	V3f v13;
-	v13.x = 1;
-	v13.y = 2;
-	v13.z = 3;
-
-	V2f v1, v2;
-	v1.x = 1;
-	v1.y = 1;
-	v2.x = 2;
-	v2.y = 2;
-	std::cout << v2 - v1 << std::endl;
-	std::cout << v2*2+v1 << std::endl;
-	std::cout << (v1 == v2) << std::endl;
-	v1 = v2;
-	std::cout << v1 << std::endl;
-	std::cout << (v1 == v2) << std::endl;
-
-	std::cout << mat1 << std::endl;
-	std::cout << mat2 << std::endl;
-	std::cout << mat1 * mat2 << std::endl;
-	std::cout << mat1 * v2 << std::endl;
-
-	std::cout << mat13 << std::endl;
-	std::cout << mat23 << std::endl;
-	std::cout << mat13 + mat23 << std::endl;
-	std::cout << mat13 - mat23 << std::endl;
-	std::cout << mat13 * mat23 << std::endl;
-	std::cout << mat13 * v13 << std::endl;
-	std::cout << v1.norm() << std::endl;
-
-	M33f exp = M33f({ 1,2,3,4,5,6,7,8,9 });
-	std::cout << exp.det() << std::endl;
-	std::cout << exp << std::endl;
-
-	M44f exp2 = M44f({ 5,4,3,1,9,1,0,12,5,6,7,8,1,5,1,3 });
-	std::cout << exp2 << std::endl;
-	std::cout << exp2.det() << std::endl;
-	std::cout << exp2.trace() << std::endl;
-	std::cout << exp2.t() << std::endl;
-
-	M23f exp3 = M23f({ 1,2,3,4,5,6 });
-	M22f exp5 = M22f({ {1,2},{1,2} });
-	V4f exp6 = V4f({ 1,2,3,4 });
-	std::cout << exp3 << std::endl;
-	std::cout << exp3 * v13 << std::endl;
-
-	M44f exp4 = M44f();
-	std::cout << exp6 << std::endl;
+	
 
 	return 1;
 }
